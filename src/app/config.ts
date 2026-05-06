@@ -12,6 +12,17 @@ export type SiteLink = {
   icon?: IconKey | string;
 };
 
+export type MusicTrack = {
+  title: string;
+  artist: string;
+  /** cover image URL (square works best) */
+  cover?: string;
+  /** link out — Spotify / YouTube / Bandcamp / etc */
+  url: string;
+  /** small badge text, e.g. "now playing", "ep", "single" */
+  tag?: string;
+};
+
 export type SiteConfig = {
   name: string;
   bio?: string;
@@ -20,6 +31,10 @@ export type SiteConfig = {
   initials?: string;
   tags?: string[];
   links: SiteLink[];
+  /** optional music showcase shown above links */
+  music?: MusicTrack[];
+  /** section heading */
+  musicTitle?: string;
   /** Master toggle — hide the entire profile section (avatar, name, bio, tags) */
   showProfile?: boolean;
   /** Granular toggles (only applied when showProfile !== false) */
@@ -48,6 +63,16 @@ export const siteConfig: SiteConfig = {
   showTags: false,
   showHeader: false,
   showFooter: false,
+  musicTitle: "now spinning",
+  music: [
+    {
+      title: "MAKE-ME-SAD",
+      artist: "sewerslvt",
+      cover: "/twif.jpg",
+      url: "https://open.spotify.com/track/0YgZ8kOg77dwJsfKlJIAdR?si=d97dca1dd0524949/",
+      tag: "single",
+    }
+  ],
   links: [
     { label: "GitHub", sub: "github.com/dexxdbg", url: "https://github.com/dexxdbg", icon: "github" },
     { label: "Twitter / X", sub: "@dexxdbg", url: "https://x.com/dexxdbg", icon: "x" },
