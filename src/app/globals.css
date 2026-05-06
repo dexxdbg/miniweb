@@ -249,6 +249,9 @@ body {
   border-color: #3a3a3a;
   background: linear-gradient(180deg, #1a1a1a, #131313);
 }
+.link-card.no-lift:hover {
+  transform: none;
+}
 .link-card:hover::before {
   transform: translateX(100%);
 }

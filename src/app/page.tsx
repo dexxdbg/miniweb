@@ -245,6 +245,10 @@ export default function Page() {
             );
           })()}
 
+          {musicTracks.length > 0 && (
+            <Separator className="my-1 border-dashed bg-transparent border-t border-[var(--color-line)]" />
+          )}
+
           {c.links.map((l, i) => (
             <a
               key={`${l.url}-${i}`}
@@ -311,7 +315,7 @@ export default function Page() {
                     setListOpen(false);
                     setSheetOpen(true);
                   }}
-                  className="link-card group relative grid w-full grid-cols-[44px_1fr_auto] items-center gap-3 overflow-hidden rounded-xl border border-[var(--color-line)] px-3 py-2.5 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                  className="link-card no-lift group relative grid w-full grid-cols-[44px_1fr_auto] items-center gap-3 overflow-hidden rounded-xl border border-[var(--color-line)] px-3 py-2.5 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
                 >
                   <span className="ico-box relative grid h-11 w-11 place-items-center overflow-hidden rounded-lg border border-[var(--color-line-2)]">
                     {t.cover ? (
