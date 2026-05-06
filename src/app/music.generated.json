@@ -1,0 +1,19 @@
+{
+  "tracks": [
+    {
+      "title": "Make-Me-Sad",
+      "artist": "Sewerslvt",
+      "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/fd/b9/2e/fdb92eed-c836-c4e2-0635-d1a4f1317518/artwork.jpg/600x600bb.jpg",
+      "audio": "/mms.flac",
+      "url": "https://www.youtube.com/watch?v=qqMxcydQmxI&pp=ygULbWFrZS1tZS1zYWQ%3D",
+      "featured": true
+    },
+    {
+      "title": "C2 - Misplaced in Time",
+      "artist": "The Caretaker",
+      "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/b6/7b/65/b67b6534-96f7-573c-4a8d-26e90bae0cfd/4066004663753_3000.jpg/600x600bb.jpg",
+      "audio": "/c2.flac",
+      "url": "https://www.youtube.com/watch?v=odaoC959Xj4&pp=ygUUYzIgbWlzcGxhY2VkIGluIHRpbWU%3D"
+    }
+  ]
+}

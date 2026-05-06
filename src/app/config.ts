@@ -21,6 +21,10 @@ export type MusicTrack = {
   url: string;
   /** small badge text, e.g. "now playing", "ep", "single" */
   tag?: string;
+  /** local or remote audio file for in-page playback (e.g. "/audio/song.mp3") */
+  audio?: string;
+  /** mark as featured — shown in the collapsed bar */
+  featured?: boolean;
 };
 
 export type SiteConfig = {
@@ -64,15 +68,9 @@ export const siteConfig: SiteConfig = {
   showHeader: false,
   showFooter: false,
   musicTitle: "now spinning",
-  music: [
-    {
-      title: "MAKE-ME-SAD",
-      artist: "sewerslvt",
-      cover: "/twif.jpg",
-      url: "https://open.spotify.com/track/0YgZ8kOg77dwJsfKlJIAdR?si=d97dca1dd0524949/",
-      tag: "<3",
-    }
-  ],
+  // Tracks come from src/app/music.list.ts → run `npm run music:sync`
+  // You can still hardcode entries here; they merge after the generated ones.
+  music: [],
   links: [
     { label: "GitHub", sub: "github.com/dexxdbg", url: "https://github.com/dexxdbg", icon: "github" },
     { label: "Twitter / X", sub: "@dexxdbg", url: "https://x.com/dexxdbg", icon: "x" },
