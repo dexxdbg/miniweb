@@ -49,14 +49,13 @@ export const siteConfig: SiteConfig = {
   showHeader: false,
   showFooter: false,
   links: [
-    { label: "GitHub", sub: "github.com/you", url: "https://github.com/", icon: "github" },
-    { label: "Twitter / X", sub: "@you", url: "https://twitter.com/", icon: "x" },
-    { label: "Instagram", sub: "@you", url: "https://instagram.com/", icon: "instagram" },
-    { label: "YouTube", sub: "subscribe", url: "https://youtube.com/", icon: "youtube" },
-    { label: "Discord", sub: "join the server", url: "https://discord.gg/", icon: "discord" },
-    { label: "Email", sub: "say hi", url: "mailto:hi@example.com", icon: "mail" },
-    { label: "Website", sub: "example.com", url: "https://example.com", icon: "globe" },
-    { label: "Kemono", sub: "kemono.cr", url: "https://kemono.cr/", icon: "kemono" },
+    { label: "GitHub", sub: "github.com/dexxdbg", url: "https://github.com/dexxdbg", icon: "github" },
+    { label: "Twitter / X", sub: "@dexxdbg", url: "https://x.com/dexxdbg", icon: "x" },
+    //{ label: "Instagram", sub: "@you", url: "https://instagram.com/", icon: "instagram" },
+    { label: "YouTube", sub: "empty", url: "https://youtube.com/@dexxdbg", icon: "youtube" },
+    //{ label: "Discord", sub: "join the server", url: "https://discord.gg/", icon: "discord" },
+    //{ label: "Email", sub: "say hi", url: "mailto:hi@example.com", icon: "mail" },
+    //{ label: "Website", sub: "example.com", url: "https://example.com", icon: "globe" },
   ],
 };
 
