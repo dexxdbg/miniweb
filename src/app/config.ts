@@ -70,7 +70,7 @@ export const siteConfig: SiteConfig = {
       artist: "sewerslvt",
       cover: "/twif.jpg",
       url: "https://open.spotify.com/track/0YgZ8kOg77dwJsfKlJIAdR?si=d97dca1dd0524949/",
-      tag: "single",
+      tag: "<3",
     }
   ],
   links: [
