@@ -139,7 +139,7 @@ export default function Page() {
             <div className="flex items-center gap-2">
               <span suppressHydrationWarning>{time}</span>
               <span className="opacity-50">/</span>
-              <span>sys.ok</span>
+              <span>stable</span>
             </div>
           </header>
         )}

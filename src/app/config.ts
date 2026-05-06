@@ -55,17 +55,17 @@ export type SiteConfig = {
 export const siteConfig: SiteConfig = {
   name: "@dexxdbg",
   bio: "why would u ddo this?//",
-  avatar: "", // e.g. "/me.jpg" or "https://..."
+  avatar: "/wrong.jpg", // e.g. "/me.jpg" or "https://..."
   initials: "dgb",
   tags: ["designer", "dev"],
   // === visibility toggles ===
   // set showProfile: false for a links-only page
   showProfile: true,
   showAvatar: true,
-  showName: false,
-  showBio: false,
+  showName: true,
+  showBio: true,
   showTags: false,
-  showHeader: false,
+  showHeader: true,
   showFooter: false,
   musicTitle: "now spinning",
   // Tracks come from src/app/music.list.ts → run `npm run music:sync`
