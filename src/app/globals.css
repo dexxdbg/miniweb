@@ -1,26 +1,193 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --color-bg: #0a0a0a;
+  --color-panel: #111111;
+  --color-panel-2: #161616;
+  --color-line: #222222;
+  --color-line-2: #2a2a2a;
+  --color-ink: #f3f3f3;
+  --color-ink-dim: #9a9a9a;
+  --color-ink-mute: #5a5a5a;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html,
+body {
+  background: radial-gradient(
+    1200px 600px at 50% -10%,
+    #1a1a1a 0%,
+    #0a0a0a 60%,
+    #050505 100%
+  );
+  color: var(--color-ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* === background fx === */
+.fx-grid {
+  background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 40%,
+    #000 30%,
+    transparent 80%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 40%,
+    #000 30%,
+    transparent 80%
+  );
+}
+.fx-noise {
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.fx-vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
+
+/* === card === */
+.card-shell {
+  background: linear-gradient(
+    180deg,
+    var(--color-panel) 0%,
+    var(--color-panel-2) 100%
+  );
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  animation: cardIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transition: transform 0.25s ease;
+}
+.card-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05),
+    transparent 30%
+  );
+}
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* === pulse dot === */
+.pulse-dot {
+  animation: pulse 1.8s ease-out infinite;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+/* === avatar ring === */
+.avatar-ring {
+  background: conic-gradient(from 0deg, #fff, #444, #fff, #222, #fff);
+  filter: blur(0.4px);
+  animation: spin 8s linear infinite;
+  opacity: 0.55;
+}
+.avatar-ring::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 9999px;
+  background: var(--color-panel);
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === name gradient === */
+.name-grad {
+  background: linear-gradient(180deg, #fff, #bdbdbd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* === link card === */
+.link-card {
+  background: linear-gradient(180deg, #141414, #101010);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.3s, background 0.3s;
+}
+.link-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+.link-card:hover {
+  transform: translateY(-2px);
+  border-color: #3a3a3a;
+  background: linear-gradient(180deg, #1a1a1a, #131313);
+}
+.link-card:hover::before {
+  transform: translateX(100%);
+}
+.link-card .ico-box {
+  background: linear-gradient(180deg, #1f1f1f, #0d0d0d);
+}
+
+.link-in {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: linkIn 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+@keyframes linkIn {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
