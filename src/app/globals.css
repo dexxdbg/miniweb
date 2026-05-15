@@ -1,40 +1,40 @@
 @import "tailwindcss";
 
-/* ════════════════════════════════════════════════════════════════════════════
-   Material Design 3 — Dark Violet/Purple theme
-   Seed colour: #6750A4  (generated with Material Theme Builder)
-   ════════════════════════════════════════════════════════════════════════════ */
+/* ============================================================
+   Material Design 3 — Dark Violet/Purple palette
+   Seed: #6750A4  (Material Theme Builder)
+   ============================================================ */
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 :root,
 [data-theme="dark"] {
-    /* ── Primary ── */
+    /* Primary */
     --md-sys-color-primary: #d0bcff;
     --md-sys-color-surface-tint: #d0bcff;
     --md-sys-color-on-primary: #381e72;
     --md-sys-color-primary-container: #4f378b;
     --md-sys-color-on-primary-container: #eaddff;
     --md-sys-color-inverse-primary: #6750a4;
-    /* ── Secondary ── */
+    /* Secondary */
     --md-sys-color-secondary: #ccc2dc;
     --md-sys-color-on-secondary: #332d41;
     --md-sys-color-secondary-container: #4a4458;
     --md-sys-color-on-secondary-container: #e8def8;
-    /* ── Tertiary ── */
+    /* Tertiary */
     --md-sys-color-tertiary: #efb8c8;
     --md-sys-color-on-tertiary: #492532;
     --md-sys-color-tertiary-container: #633b48;
     --md-sys-color-on-tertiary-container: #ffd8e4;
-    /* ── Error ── */
+    /* Error */
     --md-sys-color-error: #f2b8b5;
     --md-sys-color-on-error: #601410;
     --md-sys-color-error-container: #8c1d18;
     --md-sys-color-on-error-container: #f9dedc;
-    /* ── Background ── */
+    /* Background */
     --md-sys-color-background: #1c1b1f;
     --md-sys-color-on-background: #e6e1e5;
-    /* ── Surface ── */
+    /* Surface */
     --md-sys-color-surface: #1c1b1f;
     --md-sys-color-surface-dim: #141218;
     --md-sys-color-surface-bright: #3b383e;
@@ -48,21 +48,21 @@
     --md-sys-color-surface-variant: #49454f;
     --md-sys-color-inverse-surface: #e6e1e5;
     --md-sys-color-inverse-on-surface: #313033;
-    /* ── Outline ── */
+    /* Outline */
     --md-sys-color-outline: #938f99;
     --md-sys-color-outline-variant: #49454f;
-    /* ── Scrim ── */
+    /* Scrim */
     --md-sys-color-shadow: #000000;
     --md-sys-color-scrim: #000000;
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   Tailwind v4 @theme — maps MD3 tokens → utility classes
-   (bg-surface-container-high, text-on-surface-variant, border-outline, …)
-   ════════════════════════════════════════════════════════════════════════════ */
+/* ============================================================
+   Tailwind v4 theme — maps MD3 tokens to utility classes
+   bg-surface-container-high, text-on-surface-variant, etc.
+   ============================================================ */
 @theme inline {
-    --font-sans: var(--font-roboto, ui-sans-serif, system-ui, sans-serif);
-    --font-mono: var(--font-roboto-mono, ui-monospace, monospace);
+    --font-sans: var(--font-roboto);
+    --font-mono: var(--font-roboto-mono);
 
     --color-background: var(--md-sys-color-background);
     --color-on-background: var(--md-sys-color-on-background);
@@ -104,9 +104,9 @@
     --color-on-error-container: var(--md-sys-color-on-error-container);
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
+/* ============================================================
    Base
-   ════════════════════════════════════════════════════════════════════════════ */
+   ============================================================ */
 @layer base {
     *,
     *::before,
@@ -116,32 +116,33 @@
     body {
         background-color: var(--md-sys-color-background);
         color: var(--md-sys-color-on-background);
-        font-family: var(--font-sans);
+        font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
     }
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   Page background — subtle primary-tinted radial gradient
-   ════════════════════════════════════════════════════════════════════════════ */
+/* ============================================================
+   Page background
+   Subtle primary-container tint at the top for depth.
+   NOTE: no CSS comments inside function arguments — PostCSS
+         chokes on them and silently drops the whole block.
+   ============================================================ */
 .m3-page-bg {
     min-height: 100svh;
-    background:
-        radial-gradient(
-            ellipse 100% 50% at 50% 0%,
-            rgba(79, 55, 139, 0.28) 0%,
-            /* primary-container tint */ transparent 65%
-        ),
-        var(--md-sys-color-background);
+    background-color: var(--md-sys-color-background);
+    background-image: radial-gradient(
+        ellipse 100% 50% at 50% 0%,
+        rgba(79, 55, 139, 0.28) 0%,
+        transparent 65%
+    );
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
+/* ============================================================
    Profile card  (MD3 Elevated Card — level 1)
-   ════════════════════════════════════════════════════════════════════════════ */
+   ============================================================ */
 .m3-profile-card {
     background: var(--md-sys-color-surface-container);
     border-radius: 28px;
-    /* tonal elevation: surface-tint at 5% + shadow */
     box-shadow:
         0 1px 2px rgba(0, 0, 0, 0.3),
         0 2px 6px 2px rgba(0, 0, 0, 0.15);
@@ -160,9 +161,9 @@
     }
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   Now-playing bar  (secondary-container surface)
-   ════════════════════════════════════════════════════════════════════════════ */
+/* ============================================================
+   Now-playing bar  (secondary-container)
+   ============================================================ */
 .m3-now-playing {
     background: var(--md-sys-color-secondary-container);
     border-radius: 16px;
@@ -186,9 +187,9 @@
     opacity: 0.12;
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   Link cards  (surface-container-high, MD3 state layer)
-   ════════════════════════════════════════════════════════════════════════════ */
+/* ============================================================
+   Link cards  (surface-container-high + MD3 state layer)
+   ============================================================ */
 .m3-link-card {
     background: var(--md-sys-color-surface-container-high);
     border-radius: 12px;
@@ -216,7 +217,7 @@
     opacity: 0.12;
 }
 
-/* ── Icon container inside link card ── */
+/* Icon container inside link card */
 .m3-link-icon {
     display: flex;
     align-items: center;
@@ -229,9 +230,9 @@
     color: var(--md-sys-color-on-primary-container);
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   MD3 Assist Chip  (outlined style)
-   ════════════════════════════════════════════════════════════════════════════ */
+/* ============================================================
+   MD3 Assist Chip  (outlined)
+   ============================================================ */
 .m3-chip {
     display: inline-flex;
     align-items: center;
@@ -241,16 +242,15 @@
     border: 1px solid var(--md-sys-color-outline);
     background: transparent;
     color: var(--md-sys-color-on-surface-variant);
-    font-family: var(--font-sans);
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0.006em;
     white-space: nowrap;
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   Entrance animation for link items  (staggered)
-   ════════════════════════════════════════════════════════════════════════════ */
+/* ============================================================
+   Entrance animation (staggered)
+   ============================================================ */
 .link-in {
     opacity: 0;
     animation: m3-item-in 0.35s cubic-bezier(0.2, 0, 0, 1) forwards;
@@ -266,9 +266,9 @@
     }
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
+/* ============================================================
    Online-status pulse dot
-   ════════════════════════════════════════════════════════════════════════════ */
+   ============================================================ */
 .m3-pulse {
     animation: m3-pulse-anim 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -282,9 +282,9 @@
     }
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
+/* ============================================================
    MD3 Bottom Sheet
-   ════════════════════════════════════════════════════════════════════════════ */
+   ============================================================ */
 .m3-sheet-scrim {
     position: fixed;
     inset: 0;
@@ -315,9 +315,9 @@
     opacity: 0.4;
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   Music player — progress bar  (MD3 Slider-like)
-   ════════════════════════════════════════════════════════════════════════════ */
+/* ============================================================
+   Music player — progress bar
+   ============================================================ */
 .progress-bar {
     position: relative;
     height: 4px;
@@ -347,9 +347,9 @@
     opacity: 1;
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   Music list item (inside bottom sheet)
-   ════════════════════════════════════════════════════════════════════════════ */
+/* ============================================================
+   Music list track item
+   ============================================================ */
 .m3-track-item {
     background: var(--md-sys-color-surface-container-high);
     border-radius: 12px;
