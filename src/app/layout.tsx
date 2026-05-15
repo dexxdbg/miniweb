@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import DevAgentation from "./dev-agentation";
 
-const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
-const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-roboto",
+});
+
+const robotoMono = Roboto_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-roboto-mono",
+});
 
 export const metadata: Metadata = {
   title: "// nodes",
@@ -18,9 +27,9 @@ export default function RootLayout({
     <html
       lang="en"
       data-theme="dark"
-      className={`${sans.variable} ${mono.variable} h-full antialiased`}
+      className={`${roboto.variable} ${robotoMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full">
+      <body className="min-h-full bg-[#1C1B1F]">
         {children}
         <DevAgentation />
       </body>

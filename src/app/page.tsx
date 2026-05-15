@@ -8,8 +8,6 @@ import musicGenerated from "./music.generated.json";
 import { MusicSheet } from "./music-sheet";
 import { Icons, isIconKey } from "./icons";
 import { M3BottomSheet } from "./bottom-sheet";
-// Actify components — Card is used for the profile container, Divider
-// for separators, Avatar for the profile photo.
 import { Divider } from "actify";
 import { Avatar } from "actify";
 
@@ -25,13 +23,28 @@ function buildHash(s: string) {
 function renderIcon(icon?: string) {
   if (!icon) {
     const I = Icons.link;
-    return <I />;
+    return <I width={18} height={18} />;
   }
   if (isIconKey(icon)) {
     const I = Icons[icon];
-    return <I />;
+    return <I width={18} height={18} />;
   }
-  return <span className="font-mono text-[14px] leading-none">{icon}</span>;
+  return <span className="text-[15px] leading-none">{icon}</span>;
+}
+
+/** Material Design 3 chevron-right icon */
+function ChevronRight() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={18}
+      height={18}
+      fill="currentColor"
+      aria-hidden
+    >
+      <path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+    </svg>
+  );
 }
 
 /* ─── Page ─── */
@@ -80,7 +93,7 @@ export default function Page() {
     return () => clearInterval(id);
   }, []);
 
-  /* Tilt effect */
+  /* Subtle perspective tilt following the cursor */
   useEffect(() => {
     if (!mounted) return;
     let raf = 0;
@@ -95,13 +108,13 @@ export default function Page() {
         const r = el.getBoundingClientRect();
         const x = (e.clientX - r.left - r.width / 2) / r.width;
         const y = (e.clientY - r.top - r.height / 2) / r.height;
-        el.style.transform = `perspective(1200px) rotateX(${(-y * 2).toFixed(2)}deg) rotateY(${(x * 2).toFixed(2)}deg)`;
+        // Keep tilt subtle — max ±1.5 deg for M3 feel
+        el.style.transform = `perspective(1400px) rotateX(${(-y * 1.5).toFixed(2)}deg) rotateY(${(x * 1.5).toFixed(2)}deg)`;
         raf = 0;
       });
     };
     const onLeave = () => {
-      const el = cardRef.current;
-      if (el) el.style.transform = "";
+      if (cardRef.current) cardRef.current.style.transform = "";
     };
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseleave", onLeave);
@@ -112,278 +125,373 @@ export default function Page() {
   }, [mounted]);
 
   return (
-    <div className="relative grid min-h-screen place-items-center px-4 py-8">
-      {/* Background layers */}
-      <div className="fx-grid pointer-events-none fixed inset-0 z-0" />
-      <div className="fx-noise pointer-events-none fixed inset-0 z-[1]" />
-      <div className="fx-vignette pointer-events-none fixed inset-0 z-[2]" />
-
-      {/*
-        MD3 profile card — uses the .card-shell CSS class which applies the
-        dark gradient, box-shadow, entrance animation and hover-tilt effect.
-        The ref drives the mouse-tilt via requestAnimationFrame.
-      */}
+    /* Page — M3 background with subtle primary-tinted radial at top */
+    <div className="m3-page-bg flex flex-col items-center justify-center px-4 py-12">
+      {/* ══ Profile card ══════════════════════════════════════════════════════ */}
       <div
         ref={cardRef}
-        className={`card-shell relative z-10 w-full max-w-[480px] px-7 pb-4 text-on-surface backdrop-blur-md ${
-          showHeader || profileVisible ? "pt-7" : "pt-4"
-        }`}
+        className="m3-profile-card w-full max-w-[432px] px-6 pb-6 pt-5"
       >
-        {/* inner flex column */}
-        <div className="flex flex-col gap-0">
-          {/* ── Header bar ── */}
-          {showHeader && (
-            <header className="flex items-center justify-between pb-3 font-mono text-[11px] tracking-[0.18em] text-[var(--md-sys-color-on-surface-variant)]">
-              <div className="flex items-center gap-2 text-[var(--md-sys-color-on-surface-variant)]">
-                <span className="pulse-dot h-2 w-2 rounded-full bg-on-surface" />
-                <span>online</span>
-              </div>
+        {/* ── Status bar ───────────────────────────────────────────────────── */}
+        {showHeader && (
+          <>
+            <div className="flex items-center justify-between mb-4">
+              {/* Online indicator */}
               <div className="flex items-center gap-2">
-                <span suppressHydrationWarning>{time}</span>
-                <span className="opacity-50">/</span>
-                <span>stable</span>
+                <span
+                  className="m3-pulse h-[9px] w-[9px] rounded-full flex-shrink-0"
+                  style={{ background: "var(--md-sys-color-tertiary)" }}
+                />
+                <span
+                  className="text-[11px] font-medium tracking-[0.1em] uppercase"
+                  style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+                >
+                  online
+                </span>
               </div>
-            </header>
-          )}
+              {/* Live clock */}
+              <span
+                className="font-mono text-[11px]"
+                style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+                suppressHydrationWarning
+              >
+                {time}
+              </span>
+            </div>
+            <Divider />
+          </>
+        )}
 
-          {showHeader && <Divider />}
-
-          {/* ── Profile section ── */}
-          {profileVisible && (
-            <section
-              className={`flex flex-col items-center text-center ${
-                showHeader ? "pt-6" : "pt-2"
-              } pb-2`}
-            >
-              {showAvatar && (
-                <div className="relative mb-3 h-24 w-24">
-                  <div className="avatar-ring absolute -inset-1.5 rounded-full" />
-                  {/* Actify Avatar (simple <img>) inside a styled wrapper */}
-                  <div className="relative z-10 h-24 w-24 rounded-full overflow-hidden border border-outline-variant bg-surface-container-low flex items-center justify-center">
-                    {c.avatar ? (
-                      <Avatar
-                        src={c.avatar}
-                        alt={c.name}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <span className="font-mono text-[28px] text-on-surface-variant">
-                        {initials}
-                      </span>
-                    )}
-                  </div>
+        {/* ── Profile section ──────────────────────────────────────────────── */}
+        {profileVisible && (
+          <section
+            className={`flex flex-col items-center text-center ${showHeader ? "pt-5" : "pt-2"} pb-4`}
+          >
+            {/* Avatar with primary-coloured ring */}
+            {showAvatar && (
+              <div
+                className="mb-4 rounded-full p-[2.5px]"
+                style={{ background: "var(--md-sys-color-primary)" }}
+              >
+                <div
+                  className="h-[83px] w-[83px] rounded-full overflow-hidden flex items-center justify-center"
+                  style={{
+                    background: "var(--md-sys-color-surface-container)",
+                  }}
+                >
+                  {c.avatar ? (
+                    <Avatar
+                      src={c.avatar}
+                      alt={c.name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span
+                      className="text-[30px] font-medium select-none"
+                      style={{
+                        color: "var(--md-sys-color-on-primary-container)",
+                      }}
+                    >
+                      {initials}
+                    </span>
+                  )}
                 </div>
-              )}
-
-              {showName && (
-                <h1 className="name-grad font-mono text-[22px] font-semibold tracking-wide">
-                  {c.name}
-                </h1>
-              )}
-
-              {showBio && (
-                <p className="mt-2 max-w-[38ch] text-[13.5px] leading-relaxed text-on-surface-variant">
-                  {c.bio}
-                </p>
-              )}
-
-              {showTags && (
-                <div className="mt-3.5 flex flex-wrap justify-center gap-1.5">
-                  {c.tags!.map((t) => (
-                    /* MD3 Assist Chip — styled via .m3-chip CSS class */
-                    <span key={t} className="m3-chip">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </section>
-          )}
-
-          {/* ── Navigation / links ── */}
-          <nav className="my-5 flex flex-col gap-2.5">
-            {/* Music featured bar */}
-            {musicTracks.length > 0 &&
-              (() => {
-                const featured =
-                  musicTracks.find((t) => t.featured) ?? musicTracks[0];
-                const trackInitial = featured.title.slice(0, 1).toUpperCase();
-                return (
-                  <button
-                    type="button"
-                    onClick={() => setListOpen(true)}
-                    className="link-card link-in group relative grid w-full grid-cols-[36px_1fr_auto] items-center gap-3 overflow-hidden px-3 py-2 text-left outline-none focus-visible:ring-2"
-                    style={{ animationDelay: "0.05s" }}
-                  >
-                    <span className="ico-box relative grid h-9 w-9 place-items-center overflow-hidden rounded-lg border border-outline-variant">
-                      {featured.cover ? (
-                        <Image
-                          src={featured.cover}
-                          alt={`${featured.title} cover`}
-                          fill
-                          sizes="36px"
-                          className="object-cover"
-                        />
-                      ) : (
-                        <span className="font-mono text-[12px] text-on-surface-variant">
-                          {trackInitial}
-                        </span>
-                      )}
-                    </span>
-                    <span className="flex min-w-0 flex-col gap-0 text-left">
-                      <span className="flex items-center gap-2">
-                        <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-on-surface" />
-                        <span className="font-mono text-[9.5px] tracking-[0.18em] text-on-surface-variant">
-                          {c.musicTitle ?? "now spinning"}
-                        </span>
-                      </span>
-                      <span className="truncate text-[12.5px] font-semibold tracking-wide text-on-surface">
-                        {featured.title}
-                        <span className="ml-1.5 font-mono text-[10px] font-normal text-on-surface-variant">
-                          · {featured.artist}
-                        </span>
-                      </span>
-                    </span>
-                    <span className="flex items-center gap-2 text-on-surface-variant">
-                      <span className="font-mono text-[10px] tracking-[0.14em]">
-                        {musicTracks.length}
-                      </span>
-                      <span className="transition-all duration-300 group-hover:translate-x-1 group-hover:text-on-surface">
-                        →
-                      </span>
-                    </span>
-                  </button>
-                );
-              })()}
-
-            {musicTracks.length > 0 && (
-              <div className="my-1">
-                <Divider />
               </div>
             )}
 
-            {/* Social / site links */}
-            {c.links.map((l, i) => (
-              <a
-                key={`${l.url}-${i}`}
-                href={l.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link-card link-in group relative grid grid-cols-[36px_1fr_auto] items-center gap-3 overflow-hidden px-4 py-3.5 font-mono text-[13.5px] text-on-surface outline-none focus-visible:ring-2"
-                style={{ animationDelay: `${0.1 + i * 0.06}s` }}
+            {/* Name — Headline Medium */}
+            {showName && (
+              <h1
+                className="text-[26px] font-light tracking-tight leading-tight"
+                style={{ color: "var(--md-sys-color-on-surface)" }}
               >
-                <span className="ico-box grid h-9 w-9 place-items-center rounded-lg border border-outline-variant text-on-surface">
-                  {renderIcon(l.icon)}
-                </span>
-                <span className="flex min-w-0 flex-col gap-0.5 text-left">
-                  <span className="truncate text-[13.5px] font-semibold tracking-wide text-on-surface">
-                    {l.label}
-                  </span>
-                  {l.sub && (
-                    <span className="text-[10.5px] tracking-[0.18em] text-on-surface-variant">
-                      {l.sub}
-                    </span>
-                  )}
-                </span>
-                <span className="font-mono text-on-surface-variant transition-all duration-300 group-hover:translate-x-1 group-hover:text-on-surface">
-                  →
-                </span>
-              </a>
-            ))}
-          </nav>
+                {c.name}
+              </h1>
+            )}
 
-          {/* ── Footer bar ── */}
-          {showFooter && (
-            <>
+            {/* Bio — Body Medium */}
+            {showBio && (
+              <p
+                className="mt-1.5 text-[14px] leading-[1.43] max-w-[34ch]"
+                style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+              >
+                {c.bio}
+              </p>
+            )}
+
+            {/* Tags — MD3 Assist Chips */}
+            {showTags && (
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
+                {c.tags!.map((t) => (
+                  <span key={t} className="m3-chip">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* ── Navigation ───────────────────────────────────────────────────── */}
+        <nav className="flex flex-col gap-2.5 mt-1">
+          {/* Now-Playing bar — secondary-container */}
+          {musicTracks.length > 0 &&
+            (() => {
+              const featured =
+                musicTracks.find((t) => t.featured) ?? musicTracks[0];
+              return (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setListOpen(true)}
+                    className="m3-now-playing link-in w-full flex items-center gap-3 px-4 py-3"
+                    style={{ animationDelay: "0.05s" }}
+                  >
+                    {/* Album art / placeholder */}
+                    <div
+                      className="relative h-10 w-10 rounded-[10px] overflow-hidden flex-shrink-0 flex items-center justify-center"
+                      style={{
+                        background:
+                          "var(--md-sys-color-surface-container-highest)",
+                      }}
+                    >
+                      {featured.cover ? (
+                        <Image
+                          src={featured.cover}
+                          alt={featured.title}
+                          fill
+                          sizes="40px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <span
+                          className="text-[13px] font-medium"
+                          style={{
+                            color: "var(--md-sys-color-on-secondary-container)",
+                          }}
+                        >
+                          {featured.title[0].toUpperCase()}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Track info */}
+                    <div className="flex-1 min-w-0 text-left">
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <span
+                          className="m3-pulse h-[7px] w-[7px] rounded-full flex-shrink-0"
+                          style={{
+                            background: "var(--md-sys-color-secondary)",
+                          }}
+                        />
+                        <span
+                          className="text-[10px] font-medium tracking-[0.12em] uppercase"
+                          style={{ color: "var(--md-sys-color-secondary)" }}
+                        >
+                          {c.musicTitle ?? "now playing"}
+                        </span>
+                      </div>
+                      <div
+                        className="text-[14px] font-medium leading-tight truncate"
+                        style={{
+                          color: "var(--md-sys-color-on-secondary-container)",
+                        }}
+                      >
+                        {featured.title}
+                      </div>
+                      <div
+                        className="text-[12px] truncate mt-0.5"
+                        style={{
+                          color: "var(--md-sys-color-on-secondary-container)",
+                          opacity: 0.75,
+                        }}
+                      >
+                        {featured.artist}
+                      </div>
+                    </div>
+
+                    {/* Track count + chevron */}
+                    <div
+                      className="flex items-center gap-0.5 flex-shrink-0"
+                      style={{
+                        color: "var(--md-sys-color-on-secondary-container)",
+                        opacity: 0.75,
+                      }}
+                    >
+                      <span className="text-[13px] font-medium">
+                        {musicTracks.length}
+                      </span>
+                      <ChevronRight />
+                    </div>
+                  </button>
+
+                  {/* Actify Divider between music and links */}
+                  <div className="my-1">
+                    <Divider />
+                  </div>
+                </>
+              );
+            })()}
+
+          {/* Link items — surface-container-high cards */}
+          {c.links.map((l, i) => (
+            <a
+              key={`${l.url}-${i}`}
+              href={l.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="m3-link-card link-in"
+              style={{ animationDelay: `${0.08 + i * 0.05}s` }}
+            >
+              {/* Primary-container icon box */}
+              <span className="m3-link-icon">{renderIcon(l.icon)}</span>
+
+              {/* Labels */}
+              <span className="flex min-w-0 flex-1 flex-col">
+                <span
+                  className="text-[15px] font-medium leading-snug truncate"
+                  style={{ color: "var(--md-sys-color-on-surface)" }}
+                >
+                  {l.label}
+                </span>
+                {l.sub && (
+                  <span
+                    className="text-[12px] leading-snug truncate"
+                    style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+                  >
+                    {l.sub}
+                  </span>
+                )}
+              </span>
+
+              {/* Trailing chevron */}
+              <span
+                className="flex-shrink-0"
+                style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+              >
+                <ChevronRight />
+              </span>
+            </a>
+          ))}
+        </nav>
+
+        {/* ── Footer (optional) ────────────────────────────────────────────── */}
+        {showFooter && (
+          <>
+            <div className="my-4">
               <Divider />
-              <footer className="flex items-center pt-3 font-mono text-[10.5px] tracking-[0.18em] text-on-surface-variant">
-                <span>[ esc ] to exit</span>
-                <span className="flex-1" />
-                <span>v1.0 // build.{build}</span>
-              </footer>
-            </>
-          )}
-        </div>
+            </div>
+            <footer
+              className="flex items-center justify-between font-mono text-[11px]"
+              style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+            >
+              <span>build.{build}</span>
+              <span>v1.0</span>
+            </footer>
+          </>
+        )}
       </div>
 
-      {/* ── Music list sheet ── */}
+      {/* ══ Music list bottom sheet ═══════════════════════════════════════════ */}
       <M3BottomSheet
         open={listOpen}
         onClose={() => setListOpen(false)}
-        className="px-5 pt-2 pb-6"
+        className="px-4 pt-1 pb-8"
       >
-        <h2 className="name-grad font-mono text-[16px] font-semibold tracking-wide">
-          {c.musicTitle ?? "music"}
-        </h2>
-        <p className="font-mono text-[10.5px] tracking-[0.18em] text-on-surface-variant mb-3">
-          {musicTracks.length} track{musicTracks.length === 1 ? "" : "s"}
-        </p>
+        {/* Sheet header */}
+        <div className="px-2 pt-1 pb-3">
+          <h2
+            className="text-[20px] font-medium leading-tight"
+            style={{ color: "var(--md-sys-color-on-surface)" }}
+          >
+            {c.musicTitle ?? "music"}
+          </h2>
+          <p
+            className="text-[12px] font-medium mt-0.5"
+            style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+          >
+            {musicTracks.length} track{musicTracks.length === 1 ? "" : "s"}
+          </p>
+        </div>
 
-        <div className="flex max-h-[60vh] flex-col gap-2 overflow-y-auto pr-1">
-          {musicTracks.map((t, i) => {
-            const ti = t.title.slice(0, 1).toUpperCase();
-            return (
-              <button
-                key={`${t.url}-${i}`}
-                type="button"
-                onClick={() => {
-                  setActiveTrack(t);
-                  setListOpen(false);
-                  setSheetOpen(true);
+        {/* Track list */}
+        <div className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto">
+          {musicTracks.map((t, i) => (
+            <button
+              key={`${t.url}-${i}`}
+              type="button"
+              onClick={() => {
+                setActiveTrack(t);
+                setListOpen(false);
+                setSheetOpen(true);
+              }}
+              className="m3-track-item"
+            >
+              {/* Art */}
+              <div
+                className="relative h-12 w-12 rounded-[10px] overflow-hidden flex-shrink-0 flex items-center justify-center"
+                style={{
+                  background: "var(--md-sys-color-surface-container-highest)",
                 }}
-                className="link-card no-lift group relative grid w-full grid-cols-[44px_1fr_auto] items-center gap-3 overflow-hidden px-3 py-2.5 text-left outline-none focus-visible:ring-2"
               >
-                <span className="ico-box relative grid h-11 w-11 place-items-center overflow-hidden rounded-lg border border-outline-variant">
-                  {t.cover ? (
-                    <Image
-                      src={t.cover}
-                      alt={`${t.title} cover`}
-                      fill
-                      sizes="44px"
-                      className="object-cover"
-                    />
-                  ) : (
-                    <span className="font-mono text-[14px] text-on-surface-variant">
-                      {ti}
+                {t.cover ? (
+                  <Image
+                    src={t.cover}
+                    alt={t.title}
+                    fill
+                    sizes="48px"
+                    className="object-cover"
+                  />
+                ) : (
+                  <span
+                    className="text-[15px] font-medium"
+                    style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+                  >
+                    {t.title[0].toUpperCase()}
+                  </span>
+                )}
+              </div>
+
+              {/* Info */}
+              <div className="min-w-0 flex flex-col">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span
+                    className="text-[14px] font-medium truncate"
+                    style={{ color: "var(--md-sys-color-on-surface)" }}
+                  >
+                    {t.title}
+                  </span>
+                  {t.tag && (
+                    <span className="m3-chip !h-auto !py-0.5 !text-[10px] flex-shrink-0">
+                      {t.tag}
                     </span>
                   )}
-                  <span className="pointer-events-none absolute inset-0 grid place-items-center bg-black/55 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                    <svg
-                      viewBox="0 0 24 24"
-                      width={16}
-                      height={16}
-                      fill="currentColor"
-                      className="text-on-surface"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </span>
+                </div>
+                <span
+                  className="text-[12px] truncate"
+                  style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+                >
+                  {t.artist}
                 </span>
-                <span className="flex min-w-0 flex-col gap-0.5 text-left">
-                  <span className="flex items-center gap-2">
-                    <span className="truncate text-[13.5px] font-semibold tracking-wide text-on-surface">
-                      {t.title}
-                    </span>
-                    {t.tag && (
-                      <span className="m3-chip !text-[9.5px] !py-0 !px-1.5">
-                        {t.tag}
-                      </span>
-                    )}
-                  </span>
-                  <span className="truncate font-mono text-[10.5px] tracking-[0.14em] text-on-surface-variant">
-                    {t.artist}
-                  </span>
-                </span>
-                <span className="font-mono text-on-surface-variant transition-all duration-300 group-hover:translate-x-1 group-hover:text-on-surface">
-                  ▶
-                </span>
-              </button>
-            );
-          })}
+              </div>
+
+              {/* Play indicator */}
+              <span style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                <svg
+                  viewBox="0 0 24 24"
+                  width={18}
+                  height={18}
+                  fill="currentColor"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </span>
+            </button>
+          ))}
         </div>
       </M3BottomSheet>
 
-      {/* ── Music player sheet ── */}
+      {/* ══ Music player bottom sheet ═════════════════════════════════════════ */}
       <MusicSheet
         track={activeTrack}
         open={sheetOpen}

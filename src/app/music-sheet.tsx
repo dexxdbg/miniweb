@@ -7,9 +7,9 @@ import type { MusicTrack } from "./config";
 
 function fmt(s: number) {
   if (!isFinite(s) || s < 0) s = 0;
-  const m = Math.floor(s / 60);
-  const r = Math.floor(s % 60);
-  return `${m}:${r.toString().padStart(2, "0")}`;
+  return `${Math.floor(s / 60)}:${Math.floor(s % 60)
+    .toString()
+    .padStart(2, "0")}`;
 }
 
 export function MusicSheet({
@@ -28,7 +28,6 @@ export function MusicSheet({
   const [cur, setCur] = useState(0);
   const [dur, setDur] = useState(0);
 
-  /* Reset / autoplay on track change */
   useEffect(() => {
     setPlaying(false);
     setCur(0);
@@ -44,7 +43,6 @@ export function MusicSheet({
     }
   }, [track, open]);
 
-  /* Pause when sheet closes */
   useEffect(() => {
     if (!open) {
       audioRef.current?.pause();
@@ -54,17 +52,17 @@ export function MusicSheet({
 
   if (!track) return null;
 
-  const initials = track.title.slice(0, 1).toUpperCase();
+  const initials = track.title[0].toUpperCase();
   const pct = dur > 0 ? (cur / dur) * 100 : 0;
 
   const toggle = () => {
     const a = audioRef.current;
     if (!a) return;
-    if (a.paused) {
+    if (a.paused)
       a.play()
         .then(() => setPlaying(true))
         .catch(() => setPlaying(false));
-    } else {
+    else {
       a.pause();
       setPlaying(false);
     }
@@ -74,8 +72,8 @@ export function MusicSheet({
     const a = audioRef.current;
     if (!a || !dur) return;
     const r = e.currentTarget.getBoundingClientRect();
-    const ratio = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
-    a.currentTime = ratio * dur;
+    a.currentTime =
+      Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)) * dur;
     setCur(a.currentTime);
   };
 
@@ -83,20 +81,28 @@ export function MusicSheet({
     <M3BottomSheet
       open={open}
       onClose={() => onOpenChange(false)}
-      className="px-5 pt-2 pb-7"
+      className="relative px-6 pt-2 pb-8"
     >
-      {/* Back button */}
+      {/* ── Back button ── */}
       {onBack && (
         <button
           type="button"
           aria-label="back to list"
           onClick={onBack}
-          className="absolute top-3 left-3 grid h-8 w-8 place-items-center rounded-full text-on-surface-variant transition-colors hover:bg-white/[0.04] hover:text-on-surface"
+          className="absolute top-0 left-4 h-9 w-9 rounded-full flex items-center justify-center transition-colors"
+          style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.background =
+              "rgba(202,196,208,0.08)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.background = "";
+          }}
         >
           <svg
             viewBox="0 0 24 24"
-            width={16}
-            height={16}
+            width={18}
+            height={18}
             fill="none"
             stroke="currentColor"
             strokeWidth={2}
@@ -108,42 +114,58 @@ export function MusicSheet({
         </button>
       )}
 
-      <div className="flex flex-col items-center gap-4">
-        {/* Album art */}
-        <div className="relative h-44 w-44 overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-high shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
+      <div className="flex flex-col items-center gap-5">
+        {/* ── Album art ── */}
+        <div
+          className="relative h-48 w-48 overflow-hidden flex items-center justify-center flex-shrink-0"
+          style={{
+            borderRadius: "24px",
+            background: "var(--md-sys-color-surface-container-highest)",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.3)",
+          }}
+        >
           {track.cover ? (
             <Image
               src={track.cover}
               alt={`${track.title} cover`}
               fill
-              sizes="176px"
+              sizes="192px"
               className="object-cover"
             />
           ) : (
-            <span className="grid h-full w-full place-items-center font-mono text-[42px] text-on-surface-variant">
+            <span
+              className="text-[52px] font-medium select-none"
+              style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+            >
               {initials}
             </span>
           )}
         </div>
 
-        {/* Track info */}
-        <div className="flex w-full flex-col items-center text-center">
-          <div className="flex items-center gap-2">
-            <h3 className="name-grad font-mono text-[18px] font-semibold tracking-wide">
+        {/* ── Track info ── */}
+        <div className="w-full flex flex-col items-center text-center gap-0.5">
+          <div className="flex items-center gap-2 flex-wrap justify-center">
+            <h3
+              className="text-[22px] font-medium leading-snug"
+              style={{ color: "var(--md-sys-color-on-surface)" }}
+            >
               {track.title}
             </h3>
             {track.tag && (
-              <span className="m3-chip !text-[9.5px] !py-0 !px-1.5">
+              <span className="m3-chip !h-auto !py-0.5 !text-[10px]">
                 {track.tag}
               </span>
             )}
           </div>
-          <p className="mt-0.5 font-mono text-[11px] tracking-[0.18em] text-on-surface-variant">
+          <p
+            className="text-[14px]"
+            style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+          >
             {track.artist}
           </p>
         </div>
 
-        {/* Audio player (if audio src is available) */}
+        {/* ── Audio player ── */}
         {track.audio ? (
           <>
             <audio
@@ -160,21 +182,24 @@ export function MusicSheet({
               onPause={() => setPlaying(false)}
             />
 
-            {/* MD3 progress bar */}
-            <div className="flex w-full flex-col gap-1.5 px-1">
+            {/* Progress */}
+            <div className="w-full flex flex-col gap-1.5">
               <div className="progress-bar" onClick={seek}>
                 <div className="progress-fill" style={{ width: `${pct}%` }} />
                 <div className="progress-thumb" style={{ left: `${pct}%` }} />
               </div>
-              <div className="flex justify-between font-mono text-[10px] tracking-[0.14em] text-on-surface-variant">
+              <div
+                className="flex justify-between font-mono text-[11px]"
+                style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+              >
                 <span>{fmt(cur)}</span>
                 <span>{fmt(dur)}</span>
               </div>
             </div>
 
-            {/* Controls */}
-            <div className="flex items-center gap-5">
-              {/* Restart */}
+            {/* Controls — restart | FAB | external */}
+            <div className="flex items-center gap-6">
+              {/* Restart — Standard icon button */}
               <button
                 type="button"
                 aria-label="restart"
@@ -185,30 +210,42 @@ export function MusicSheet({
                     setCur(0);
                   }
                 }}
-                className="grid h-9 w-9 place-items-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:text-on-surface"
+                className="h-10 w-10 rounded-full flex items-center justify-center transition-colors"
+                style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.background =
+                    "rgba(202,196,208,0.08)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.background = "";
+                }}
               >
                 <svg
                   viewBox="0 0 24 24"
-                  width={14}
-                  height={14}
+                  width={20}
+                  height={20}
                   fill="currentColor"
                 >
                   <path d="M6 6h2v12H6zM9.5 12 20 6v12z" />
                 </svg>
               </button>
 
-              {/* Play / Pause — MD3 FAB style */}
+              {/* Play/Pause — MD3 FAB (large) */}
               <button
                 type="button"
                 aria-label={playing ? "pause" : "play"}
                 onClick={toggle}
-                className="grid h-14 w-14 place-items-center rounded-full bg-primary text-on-primary shadow-lg transition-transform active:scale-95"
+                className="h-16 w-16 rounded-[18px] flex items-center justify-center shadow-lg transition-transform active:scale-95"
+                style={{
+                  background: "var(--md-sys-color-primary-container)",
+                  color: "var(--md-sys-color-on-primary-container)",
+                }}
               >
                 {playing ? (
                   <svg
                     viewBox="0 0 24 24"
-                    width={20}
-                    height={20}
+                    width={26}
+                    height={26}
                     fill="currentColor"
                   >
                     <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
@@ -216,8 +253,8 @@ export function MusicSheet({
                 ) : (
                   <svg
                     viewBox="0 0 24 24"
-                    width={22}
-                    height={22}
+                    width={28}
+                    height={28}
                     fill="currentColor"
                   >
                     <path d="M8 5v14l11-7z" />
@@ -225,18 +262,26 @@ export function MusicSheet({
                 )}
               </button>
 
-              {/* External link */}
+              {/* External link — Standard icon button */}
               <a
                 href={track.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="open external"
-                className="grid h-9 w-9 place-items-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:text-on-surface"
+                aria-label="open in external app"
+                className="h-10 w-10 rounded-full flex items-center justify-center transition-colors"
+                style={{ color: "var(--md-sys-color-on-surface-variant)" }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.background =
+                    "rgba(202,196,208,0.08)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.background = "";
+                }}
               >
                 <svg
                   viewBox="0 0 24 24"
-                  width={14}
-                  height={14}
+                  width={18}
+                  height={18}
                   fill="none"
                   stroke="currentColor"
                   strokeWidth={1.8}
@@ -251,34 +296,39 @@ export function MusicSheet({
             </div>
           </>
         ) : (
-          /* No audio — show external link card */
+          /* No audio — MD3 link card */
           <a
             href={track.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="link-card group relative grid w-full grid-cols-[36px_1fr_auto] items-center gap-3 overflow-hidden px-4 py-3 font-mono text-[13px] text-on-surface"
+            className="w-full flex items-center gap-4 px-4 py-3 rounded-2xl"
+            style={{
+              background: "var(--md-sys-color-secondary-container)",
+              color: "var(--md-sys-color-on-secondary-container)",
+              textDecoration: "none",
+            }}
           >
-            <span className="ico-box grid h-9 w-9 place-items-center rounded-lg border border-outline-variant">
+            <span className="flex-shrink-0">
               <svg
                 viewBox="0 0 24 24"
-                width={16}
-                height={16}
+                width={20}
+                height={20}
                 fill="currentColor"
               >
                 <path d="M8 5v14l11-7z" />
               </svg>
             </span>
-            <span className="text-left">
-              <span className="block text-[12.5px] font-semibold tracking-wide">
+            <span className="flex-1 text-left">
+              <span className="block text-[14px] font-medium">
                 open externally
               </span>
-              <span className="block text-[10px] tracking-[0.18em] text-on-surface-variant">
+              <span className="block text-[12px] opacity-75">
                 no preview available
               </span>
             </span>
-            <span className="text-on-surface-variant transition-all duration-300 group-hover:translate-x-1 group-hover:text-on-surface">
-              ↗
-            </span>
+            <svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor">
+              <path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+            </svg>
           </a>
         )}
       </div>
