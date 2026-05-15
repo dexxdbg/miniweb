@@ -1,293 +1,408 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+/* ─── Material Design 3 dark colour tokens (neutral/monochrome palette) ─── */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-@theme inline {
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-  --font-heading: var(--font-sans);
-
-  /* preserved palette tokens */
-  --color-bg: #0a0a0a;
-  --color-panel: #111111;
-  --color-panel-2: #161616;
-  --color-line: #222222;
-  --color-line-2: #2a2a2a;
-  --color-ink: #f3f3f3;
-  --color-ink-dim: #9a9a9a;
-  --color-ink-mute: #5a5a5a;
-
-  /* shadcn tokens */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
-}
-
-/* === map shadcn tokens to existing palette (dark only) === */
 :root,
-.dark {
-  --background: #0a0a0a;
-  --foreground: #f3f3f3;
-  --card: #111111;
-  --card-foreground: #f3f3f3;
-  --popover: #111111;
-  --popover-foreground: #f3f3f3;
-  --primary: #f3f3f3;
-  --primary-foreground: #0a0a0a;
-  --secondary: #161616;
-  --secondary-foreground: #f3f3f3;
-  --muted: #161616;
-  --muted-foreground: #9a9a9a;
-  --accent: #1a1a1a;
-  --accent-foreground: #f3f3f3;
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: #222222;
-  --input: #222222;
-  --ring: #2a2a2a;
-  --chart-1: #f3f3f3;
-  --chart-2: #9a9a9a;
-  --chart-3: #5a5a5a;
-  --chart-4: #2a2a2a;
-  --chart-5: #161616;
-  --radius: 0.75rem;
-  --sidebar: #111111;
-  --sidebar-foreground: #f3f3f3;
-  --sidebar-primary: #f3f3f3;
-  --sidebar-primary-foreground: #0a0a0a;
-  --sidebar-accent: #161616;
-  --sidebar-accent-foreground: #f3f3f3;
-  --sidebar-border: #222222;
-  --sidebar-ring: #2a2a2a;
+[data-theme="dark"] {
+    /* backgrounds & surfaces */
+    --md-sys-color-background: #090909;
+    --md-sys-color-on-background: #f3f3f3;
+    --md-sys-color-surface: #111111;
+    --md-sys-color-surface-dim: #0d0d0d;
+    --md-sys-color-surface-bright: #2a2a2a;
+    --md-sys-color-surface-container-lowest: #050505;
+    --md-sys-color-surface-container-low: #0e0e0e;
+    --md-sys-color-surface-container: #141414;
+    --md-sys-color-surface-container-high: #1a1a1a;
+    --md-sys-color-surface-container-highest: #222222;
+    --md-sys-color-on-surface: #f3f3f3;
+    --md-sys-color-on-surface-variant: #9a9a9a;
+    --md-sys-color-surface-variant: #1e1e1e;
+    --md-sys-color-inverse-surface: #ebebeb;
+    --md-sys-color-inverse-on-surface: #111111;
+    --md-sys-color-outline: #3a3a3a;
+    --md-sys-color-outline-variant: #252525;
+    --md-sys-color-shadow: #000000;
+    --md-sys-color-scrim: #000000;
+    /* primary (white) */
+    --md-sys-color-surface-tint: #f3f3f3;
+    --md-sys-color-primary: #f3f3f3;
+    --md-sys-color-on-primary: #0a0a0a;
+    --md-sys-color-primary-container: #2a2a2a;
+    --md-sys-color-on-primary-container: #f3f3f3;
+    --md-sys-color-inverse-primary: #222222;
+    /* secondary */
+    --md-sys-color-secondary: #c8c8c8;
+    --md-sys-color-on-secondary: #1a1a1a;
+    --md-sys-color-secondary-container: #222222;
+    --md-sys-color-on-secondary-container: #c8c8c8;
+    /* tertiary */
+    --md-sys-color-tertiary: #9a9a9a;
+    --md-sys-color-on-tertiary: #111111;
+    --md-sys-color-tertiary-container: #1e1e1e;
+    --md-sys-color-on-tertiary-container: #9a9a9a;
+    /* error */
+    --md-sys-color-error: #ffb4ab;
+    --md-sys-color-on-error: #690005;
+    --md-sys-color-error-container: #93000a;
+    --md-sys-color-on-error-container: #ffdad6;
 }
 
+/* ─── Map MD3 tokens into Tailwind v4 theme ─── */
+@theme inline {
+    --font-sans: var(--font-sans);
+    --font-mono: var(--font-mono);
+
+    /* MD3 surface/container colours */
+    --color-background: var(--md-sys-color-background);
+    --color-on-background: var(--md-sys-color-on-background);
+    --color-surface: var(--md-sys-color-surface);
+    --color-surface-dim: var(--md-sys-color-surface-dim);
+    --color-surface-bright: var(--md-sys-color-surface-bright);
+    --color-surface-container-lowest: var(
+        --md-sys-color-surface-container-lowest
+    );
+    --color-surface-container-low: var(--md-sys-color-surface-container-low);
+    --color-surface-container: var(--md-sys-color-surface-container);
+    --color-surface-container-high: var(--md-sys-color-surface-container-high);
+    --color-surface-container-highest: var(
+        --md-sys-color-surface-container-highest
+    );
+    --color-on-surface: var(--md-sys-color-on-surface);
+    --color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+    --color-surface-variant: var(--md-sys-color-surface-variant);
+    --color-inverse-surface: var(--md-sys-color-inverse-surface);
+    --color-inverse-on-surface: var(--md-sys-color-inverse-on-surface);
+    --color-outline: var(--md-sys-color-outline);
+    --color-outline-variant: var(--md-sys-color-outline-variant);
+    /* primary */
+    --color-primary: var(--md-sys-color-primary);
+    --color-on-primary: var(--md-sys-color-on-primary);
+    --color-primary-container: var(--md-sys-color-primary-container);
+    --color-on-primary-container: var(--md-sys-color-on-primary-container);
+    --color-inverse-primary: var(--md-sys-color-inverse-primary);
+    /* secondary */
+    --color-secondary: var(--md-sys-color-secondary);
+    --color-on-secondary: var(--md-sys-color-on-secondary);
+    --color-secondary-container: var(--md-sys-color-secondary-container);
+    --color-on-secondary-container: var(--md-sys-color-on-secondary-container);
+    /* tertiary */
+    --color-tertiary: var(--md-sys-color-tertiary);
+    --color-on-tertiary: var(--md-sys-color-on-tertiary);
+    --color-tertiary-container: var(--md-sys-color-tertiary-container);
+    --color-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
+    /* error */
+    --color-error: var(--md-sys-color-error);
+    --color-on-error: var(--md-sys-color-on-error);
+    --color-error-container: var(--md-sys-color-error-container);
+    --color-on-error-container: var(--md-sys-color-on-error-container);
+
+    /* legacy palette aliases (used by existing component classes) */
+    --color-bg: var(--md-sys-color-background);
+    --color-panel: var(--md-sys-color-surface);
+    --color-panel-2: var(--md-sys-color-surface-container);
+    --color-line: var(--md-sys-color-outline-variant);
+    --color-line-2: var(--md-sys-color-outline);
+    --color-ink: var(--md-sys-color-on-surface);
+    --color-ink-dim: var(--md-sys-color-on-surface-variant);
+    --color-ink-mute: #5a5a5a;
+}
+
+/* ─── Base ─── */
 html,
 body {
-  background: radial-gradient(
-    1200px 600px at 50% -10%,
-    #1a1a1a 0%,
-    #0a0a0a 60%,
-    #050505 100%
-  );
-  color: var(--color-ink);
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-}
-
-/* === background fx === */
-.fx-grid {
-  background-image: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0.04) 1px,
-      transparent 1px
-    ),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 48px 48px;
-  -webkit-mask-image: radial-gradient(
-    ellipse 80% 60% at 50% 40%,
-    #000 30%,
-    transparent 80%
-  );
-  mask-image: radial-gradient(
-    ellipse 80% 60% at 50% 40%,
-    #000 30%,
-    transparent 80%
-  );
-}
-.fx-noise {
-  opacity: 0.06;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-}
-.fx-vignette {
-  background: radial-gradient(
-    ellipse at center,
-    transparent 50%,
-    rgba(0, 0, 0, 0.7) 100%
-  );
-}
-
-/* === card === */
-.card-shell {
-  background: linear-gradient(
-    180deg,
-    var(--color-panel) 0%,
-    var(--color-panel-2) 100%
-  );
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  animation: cardIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  transition: transform 0.25s ease;
-}
-.card-shell::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.05),
-    transparent 30%
-  );
-}
-@keyframes cardIn {
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.985);
-    filter: blur(6px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-}
-
-/* === pulse dot === */
-.pulse-dot {
-  animation: pulse 1.8s ease-out infinite;
-}
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-  }
-}
-
-/* === avatar ring === */
-.avatar-ring {
-  background: conic-gradient(from 0deg, #fff, #444, #fff, #222, #fff);
-  filter: blur(0.4px);
-  animation: spin 8s linear infinite;
-  opacity: 0.55;
-}
-.avatar-ring::after {
-  content: "";
-  position: absolute;
-  inset: 5px;
-  border-radius: 9999px;
-  background: var(--color-panel);
-}
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* === name gradient === */
-.name-grad {
-  background: linear-gradient(180deg, #fff, #bdbdbd);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* === link card === */
-.link-card {
-  background: linear-gradient(180deg, #141414, #101010);
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-    border-color 0.3s, background 0.3s;
-}
-.link-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    120deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.08) 50%,
-    transparent 70%
-  );
-  transform: translateX(-100%);
-  transition: transform 0.7s ease;
-  pointer-events: none;
-}
-.link-card:hover {
-  transform: translateY(-2px);
-  border-color: #3a3a3a;
-  background: linear-gradient(180deg, #1a1a1a, #131313);
-}
-.link-card.no-lift:hover {
-  transform: none;
-}
-.link-card:hover::before {
-  transform: translateX(100%);
-}
-.link-card .ico-box {
-  background: linear-gradient(180deg, #1f1f1f, #0d0d0d);
-}
-
-.link-in {
-  opacity: 0;
-  transform: translateY(8px);
-  animation: linkIn 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-@keyframes linkIn {
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
-  }
+    background: radial-gradient(
+        1200px 600px at 50% -10%,
+        #1a1a1a 0%,
+        #0a0a0a 60%,
+        #050505 100%
+    );
+    color: var(--md-sys-color-on-surface);
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
-  }
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        @apply bg-background text-on-surface;
+    }
+    html {
+        @apply font-sans;
+    }
+}
+
+/* ─── Background effects ─── */
+.fx-grid {
+    background-image:
+        linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.04) 1px,
+            transparent 1px
+        );
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(
+        ellipse 80% 60% at 50% 40%,
+        #000 30%,
+        transparent 80%
+    );
+    mask-image: radial-gradient(
+        ellipse 80% 60% at 50% 40%,
+        #000 30%,
+        transparent 80%
+    );
+}
+.fx-noise {
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.fx-vignette {
+    background: radial-gradient(
+        ellipse at center,
+        transparent 50%,
+        rgba(0, 0, 0, 0.7) 100%
+    );
+}
+
+/* ─── Main card ─── */
+.card-shell {
+    background: linear-gradient(
+        180deg,
+        var(--md-sys-color-surface) 0%,
+        var(--md-sys-color-surface-container-low) 100%
+    );
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    animation: cardIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    transition: transform 0.25s ease;
+    border-radius: 18px;
+    border: 1px solid var(--md-sys-color-outline-variant);
+}
+.card-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.05),
+        transparent 30%
+    );
+}
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.985);
+        filter: blur(6px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+        filter: none;
+    }
+}
+
+/* ─── Pulse dot ─── */
+.pulse-dot {
+    animation: pulse 1.8s ease-out infinite;
+}
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+/* ─── Avatar ring ─── */
+.avatar-ring {
+    background: conic-gradient(from 0deg, #fff, #444, #fff, #222, #fff);
+    filter: blur(0.4px);
+    animation: spin 8s linear infinite;
+    opacity: 0.55;
+}
+.avatar-ring::after {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border-radius: 9999px;
+    background: var(--md-sys-color-surface);
+}
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ─── Name gradient ─── */
+.name-grad {
+    background: linear-gradient(180deg, #fff, #bdbdbd);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* ─── MD3 chip (tag badge) ─── */
+.m3-chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    border: 1px solid var(--md-sys-color-outline-variant);
+    background: rgba(255, 255, 255, 0.02);
+    padding: 0.2rem 0.6rem;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+/* ─── Link card (MD3 surface-container-high on hover) ─── */
+.link-card {
+    background: linear-gradient(
+        180deg,
+        var(--md-sys-color-surface-container) 0%,
+        var(--md-sys-color-surface-container-low) 100%
+    );
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: 12px;
+    transition:
+        transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+        border-color 0.3s,
+        background 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+.link-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        120deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.06) 50%,
+        transparent 70%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.7s ease;
+    pointer-events: none;
+}
+.link-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--md-sys-color-outline);
+    background: linear-gradient(
+        180deg,
+        var(--md-sys-color-surface-container-high) 0%,
+        var(--md-sys-color-surface-container) 100%
+    );
+}
+.link-card.no-lift:hover {
+    transform: none;
+}
+.link-card:hover::before {
+    transform: translateX(100%);
+}
+.link-card .ico-box {
+    background: linear-gradient(
+        180deg,
+        var(--md-sys-color-surface-container-high) 0%,
+        var(--md-sys-color-surface-container-low) 100%
+    );
+}
+
+/* ─── Link-in entrance animation ─── */
+.link-in {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: linkIn 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+@keyframes linkIn {
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ─── MD3 bottom sheet overlay ─── */
+.m3-sheet-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.m3-sheet-inner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 480px;
+    margin: 0 auto;
+    border-top-left-radius: 28px;
+    border-top-right-radius: 28px;
+    background: var(--md-sys-color-surface-container);
+    border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+.m3-sheet-grab {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0 4px;
+}
+.m3-sheet-handle {
+    width: 32px;
+    height: 4px;
+    border-radius: 100px;
+    background: var(--md-sys-color-outline);
+}
+
+/* ─── Audio progress bar ─── */
+.progress-bar {
+    position: relative;
+    height: 6px;
+    cursor: pointer;
+    border-radius: 100px;
+    background: var(--md-sys-color-outline-variant);
+}
+.progress-fill {
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    border-radius: 100px;
+    background: var(--md-sys-color-on-surface);
+}
+.progress-thumb {
+    position: absolute;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--md-sys-color-on-surface);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.progress-bar:hover .progress-thumb {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
 }
