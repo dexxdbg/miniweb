@@ -72,7 +72,7 @@ export const siteConfig: SiteConfig = {
   // You can still hardcode entries here; they merge after the generated ones.
   music: [],
   links: [
-    { label: "GitHub", sub: "git.dexx.moe", url: "https://git.dexx.moe/dexx", icon: "github" },
+    { label: "Git", sub: "git.dexx.moe", url: "https://git.dexx.moe/dexx", icon: "github" },
     { label: "Twitter / X", sub: "@dexxdbg", url: "https://x.com/dexxdbg", icon: "x" },
     //{ label: "Instagram", sub: "@you", url: "https://instagram.com/", icon: "instagram" },
     { label: "YouTube", sub: "empty", url: "https://youtube.com/@dexxdbg", icon: "youtube" },
