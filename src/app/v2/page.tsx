@@ -149,6 +149,8 @@ export default function PageV2() {
       <div className="fx-noise pointer-events-none fixed inset-0 z-[1]" />
       <div className="fx-vignette pointer-events-none fixed inset-0 z-[2]" />
 
+      <div className="v2-ab-banner">⚗ you're seeing a test version of this site via a/b testing. your activity may be used for testing.</div>
+
       <main className="v2-card">
         {showHeader && (
           <header className="v2-header">
@@ -654,6 +656,22 @@ export default function PageV2() {
         md-outlined-button, md-filled-button {
           --md-outlined-button-label-text-font: var(--font-mono);
           --md-filled-button-label-text-font: var(--font-mono);
+        }
+        .v2-ab-banner {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: 50;
+          padding: 0.5rem 1rem;
+          background: rgba(17,17,17,0.85);
+          border-top: 1px solid var(--color-line);
+          font-family: var(--font-mono);
+          font-size: 10.5px;
+          letter-spacing: 0.12em;
+          color: var(--color-ink-mute);
+          text-align: center;
+          backdrop-filter: blur(8px);
         }
       `}</style>
     </div>
