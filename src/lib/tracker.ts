@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   "https://ynwvgponhtotziietmeu.supabase.co",
-  "sb_publishable_EQrUark1rpJqPB9LJjWWmg_aKOOpAyc"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlud3ZncG9uaHRvdHppaWV0bWV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MDYwMDcsImV4cCI6MjA5NzM4MjAwN30.VIdNfMOqUc4F9kiQ40U1ExkeD2gfc36CTBBMqeLksIM"
 );
 
 function getSession() {
