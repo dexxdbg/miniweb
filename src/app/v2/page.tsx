@@ -283,10 +283,6 @@ export default function PageV2() {
         html:has(.v2-root), body:has(.v2-root) {
           background: #1c1b1f !important;
         }
-        body:has(.v2-root)::before,
-        body:has(.v2-root)::after {
-          display: none !important;
-        }
         .v2-card {
           position: relative;
           z-index: 10;
