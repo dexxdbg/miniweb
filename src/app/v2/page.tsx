@@ -281,7 +281,11 @@ export default function PageV2() {
           color: var(--m3-on-surface);
         }
         html:has(.v2-root), body:has(.v2-root) {
-          background: var(--m3-bg) !important;
+          background: #1c1b1f !important;
+        }
+        body:has(.v2-root)::before,
+        body:has(.v2-root)::after {
+          display: none !important;
         }
         .v2-card {
           position: relative;
@@ -384,10 +388,10 @@ export default function PageV2() {
           width: 44px; height: 44px;
           border-radius: 12px;
           overflow: hidden;
-          background: var(--m3-primary-container);
+          background: #4f378b;
           flex-shrink: 0;
         }
-        .v2-music-initial { font-size: 14px; color: var(--m3-primary); font-weight: 600; }
+        .v2-music-initial { font-size: 14px; color: #d0bcff; font-weight: 600; }
         .v2-music-meta { display: flex; flex-direction: column; min-width: 0; }
         .v2-music-label {
           display: flex; align-items: center; gap: 0.4rem;
@@ -400,8 +404,8 @@ export default function PageV2() {
           display: grid; place-items: center;
           width: 44px; height: 44px;
           border-radius: 12px;
-          background: var(--m3-primary-container);
-          color: var(--m3-primary);
+          background: #4f378b;
+          color: #d0bcff;
           flex-shrink: 0;
         }
         .v2-link-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
