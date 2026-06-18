@@ -201,13 +201,14 @@ export default function PageV2() {
       <Sheet open={listOpen} onOpenChange={setListOpen}>
         <SheetContent
           side="bottom"
-          className="border-[var(--color-line)] bg-[var(--color-panel)] px-5 pt-5 pb-6 text-foreground sm:mx-auto sm:max-w-[480px] sm:rounded-t-[18px]"
+          className="border-[#49454f] px-5 pt-5 pb-6 text-[#e6e1e5] sm:mx-auto sm:max-w-[480px] sm:rounded-t-[28px]"
+          style={{ background: "#211f26" }}
         >
           <div className="mx-auto -mt-2 mb-3 h-1 w-10 rounded-full bg-[var(--color-line-2)]" />
-          <SheetTitle className="name-grad font-mono text-[16px] font-semibold tracking-wide">
+          <SheetTitle className="font-mono text-[16px] font-semibold tracking-wide" style={{ color: "#e6e1e5" }}>
             {c.musicTitle ?? "music"}
           </SheetTitle>
-          <SheetDescription className="font-mono text-[10.5px] tracking-[0.18em] text-[var(--color-ink-mute)]">
+          <SheetDescription className="font-mono text-[10.5px] tracking-[0.18em]" style={{ color: "#938f99" }}>
             {musicTracks.length} track{musicTracks.length === 1 ? "" : "s"}
           </SheetDescription>
           <div className="mt-3 flex max-h-[60vh] flex-col gap-2 overflow-y-auto pr-1">
@@ -222,7 +223,8 @@ export default function PageV2() {
                     setListOpen(false);
                     setSheetOpen(true);
                   }}
-                  className="link-card no-lift group relative grid w-full grid-cols-[44px_1fr_auto] items-center gap-3 overflow-hidden rounded-xl border border-[var(--color-line)] px-3 py-2.5 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                  className="link-card no-lift group relative grid w-full grid-cols-[44px_1fr_auto] items-center gap-3 overflow-hidden rounded-2xl px-3 py-2.5 text-left outline-none"
+                  style={{ background: "#2b2930", border: "none" }}
                 >
                   <span className="ico-box relative grid h-11 w-11 place-items-center overflow-hidden rounded-lg border border-[var(--color-line-2)]">
                     {t.cover ? (
@@ -277,6 +279,9 @@ export default function PageV2() {
           padding: 2rem 1rem;
           background: var(--m3-bg);
           color: var(--m3-on-surface);
+        }
+        html:has(.v2-root), body:has(.v2-root) {
+          background: var(--m3-bg) !important;
         }
         .v2-card {
           position: relative;
