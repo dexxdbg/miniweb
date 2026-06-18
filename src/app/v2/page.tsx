@@ -89,10 +89,6 @@ export default function PageV2() {
 
   return (
     <div className="v2-root">
-      <div className="fx-grid pointer-events-none fixed inset-0 z-0" />
-      <div className="fx-noise pointer-events-none fixed inset-0 z-[1]" />
-      <div className="fx-vignette pointer-events-none fixed inset-0 z-[2]" />
-
       <div className="v2-ab-banner">⚗ you're seeing a test version of this site via a/b testing. your activity may be used for testing.</div>
 
       <main className="v2-card">
@@ -125,7 +121,7 @@ export default function PageV2() {
                 </div>
               </div>
             )}
-            {showName && <h1 className="v2-name name-grad">{c.name}</h1>}
+            {showName && <h1 className="v2-name">{c.name}</h1>}
             {showBio && <p className="v2-bio">{c.bio}</p>}
             {showTags && (
               <md-chip-set className="v2-chips">
@@ -164,7 +160,7 @@ export default function PageV2() {
                 </span>
                 <span className="v2-music-count">
                   <span>{musicTracks.length}</span>
-                  <span className="v2-arrow">→</span>
+                  <span className="v2-chevron"><svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></span>
                 </span>
               </button>
               <md-divider className="v2-link-divider" />
@@ -185,7 +181,7 @@ export default function PageV2() {
                 <span className="v2-link-label">{l.label}</span>
                 {l.sub && <span className="v2-link-sub">{l.sub}</span>}
               </span>
-              <span className="v2-arrow">→</span>
+              <span className="v2-chevron"><svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></span>
             </a>
           ))}
         </nav>
@@ -259,23 +255,38 @@ export default function PageV2() {
       />
 
       <style>{`
+        /* MD3 purple palette */
+        :root {
+          --m3-bg: #1c1b1f;
+          --m3-surface: #1c1b1f;
+          --m3-surface-container: #211f26;
+          --m3-surface-container-high: #2b2930;
+          --m3-surface-container-highest: #36343b;
+          --m3-on-surface: #e6e1e5;
+          --m3-on-surface-variant: #cac4d0;
+          --m3-outline: #938f99;
+          --m3-outline-variant: #49454f;
+          --m3-primary: #d0bcff;
+          --m3-primary-container: #4f378b;
+          --m3-on-primary: #381e72;
+        }
         .v2-root {
           display: grid;
           min-height: 100svh;
           place-items: center;
           padding: 2rem 1rem;
+          background: var(--m3-bg);
+          color: var(--m3-on-surface);
         }
         .v2-card {
           position: relative;
           z-index: 10;
           width: 100%;
           max-width: 480px;
-          background: rgba(17,17,17,0.7);
-          border: 1px solid var(--color-line);
-          border-radius: 18px;
+          background: var(--m3-surface-container);
+          border: 1px solid var(--m3-outline-variant);
+          border-radius: 28px;
           padding: 1.75rem 1.75rem 1rem;
-          backdrop-filter: blur(12px);
-          color: var(--color-ink);
         }
         .v2-header {
           display: flex;
@@ -285,21 +296,22 @@ export default function PageV2() {
           font-family: var(--font-mono);
           font-size: 11px;
           letter-spacing: 0.18em;
-          color: var(--color-ink-mute);
+          color: var(--m3-on-surface-variant);
+          text-transform: uppercase;
         }
-        .v2-status { display: flex; align-items: center; gap: 0.5rem; color: var(--color-ink-dim); }
+        .v2-status { display: flex; align-items: center; gap: 0.5rem; }
         .v2-clock { display: flex; align-items: center; gap: 0.5rem; }
         .v2-sep { opacity: 0.5; }
         .pulse-dot {
           display: inline-block;
           width: 8px; height: 8px;
           border-radius: 50%;
-          background: var(--color-ink);
+          background: #69d98c;
           animation: pulse 2s ease-in-out infinite;
         }
         .pulse-dot.small { width: 6px; height: 6px; }
         @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-        md-divider { margin: 0; --md-divider-color: var(--color-line); }
+        md-divider { margin: 0; --md-divider-color: var(--m3-outline-variant); }
         .v2-profile {
           display: flex;
           flex-direction: column;
@@ -310,88 +322,90 @@ export default function PageV2() {
         .v2-avatar-wrap {
           position: relative;
           width: 96px; height: 96px;
-          margin-bottom: 0.75rem;
+          margin-bottom: 0.875rem;
         }
         .avatar-ring {
           position: absolute;
-          inset: -6px;
+          inset: -4px;
           border-radius: 50%;
-          background: conic-gradient(from 0deg, var(--color-line-2), var(--color-ink-mute), var(--color-line-2));
-          animation: spin 8s linear infinite;
+          border: 2px solid var(--m3-primary);
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
         .v2-avatar {
           position: relative;
           z-index: 1;
           width: 96px; height: 96px;
           border-radius: 50%;
           overflow: hidden;
-          border: 1px solid var(--color-line-2);
-          background: linear-gradient(to bottom, #1c1c1c, #0e0e0e);
           display: grid;
           place-items: center;
+          background: var(--m3-surface-container-highest);
         }
-        .v2-avatar-initials { font-family: var(--font-mono); font-size: 28px; color: var(--color-ink-dim); }
-        .v2-name { font-family: var(--font-mono); font-size: 22px; font-weight: 600; letter-spacing: 0.05em; margin: 0; }
-        .v2-bio { margin-top: 0.5rem; max-width: 38ch; font-size: 13.5px; line-height: 1.6; color: var(--color-ink-dim); }
+        .v2-avatar-initials { font-size: 28px; color: var(--m3-on-surface-variant); }
+        .v2-name { font-size: 22px; font-weight: 600; margin: 0; color: var(--m3-on-surface); }
+        .v2-bio { margin-top: 0.5rem; max-width: 38ch; font-size: 13.5px; line-height: 1.6; color: var(--m3-on-surface-variant); }
         md-chip-set { margin-top: 0.875rem; justify-content: center; }
         md-assist-chip {
-          --md-assist-chip-container-color: rgba(255,255,255,0.02);
-          --md-assist-chip-outline-color: var(--color-line-2);
-          --md-assist-chip-label-text-color: var(--color-ink-dim);
-          --md-assist-chip-label-text-font: var(--font-mono);
-          --md-assist-chip-label-text-size: 10.5px;
+          --md-assist-chip-container-color: var(--m3-primary-container);
+          --md-assist-chip-outline-color: transparent;
+          --md-assist-chip-label-text-color: var(--m3-primary);
+          --md-assist-chip-label-text-size: 11px;
         }
-        .v2-links { display: flex; flex-direction: column; gap: 0.625rem; margin: 1.25rem 0; }
+        .v2-links { display: flex; flex-direction: column; gap: 0.5rem; margin: 1.25rem 0; }
         .v2-link-divider { margin: 0.25rem 0; }
         .link-card {
           display: grid;
-          grid-template-columns: 36px 1fr auto;
+          grid-template-columns: 44px 1fr auto;
           align-items: center;
-          gap: 0.75rem;
-          border: 1px solid var(--color-line);
-          border-radius: 12px;
-          padding: 0.875rem 1rem;
+          gap: 0.875rem;
+          border-radius: 16px;
+          padding: 0.75rem 1rem;
           text-decoration: none;
-          color: var(--color-ink);
-          background: transparent;
+          color: var(--m3-on-surface);
+          background: var(--m3-surface-container-high);
           cursor: pointer;
           width: 100%;
           text-align: left;
-          transition: background 0.15s, border-color 0.15s;
+          border: none;
+          transition: background 0.15s;
         }
-        .link-card:hover { background: rgba(255,255,255,0.025); border-color: var(--color-line-2); }
-        .link-in { animation: linkIn 0.4s ease both; }
+        .link-card:hover { background: var(--m3-surface-container-highest); }
+        .link-in { animation: linkIn 0.35s ease both; }
         @keyframes linkIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-        .v2-music-bar { padding: 0.5rem 0.75rem; }
+        .v2-music-bar { padding: 0.625rem 1rem; }
         .v2-music-cover {
           position: relative;
           display: grid;
           place-items: center;
-          width: 36px; height: 36px;
-          border-radius: 8px;
-          border: 1px solid var(--color-line-2);
+          width: 44px; height: 44px;
+          border-radius: 12px;
           overflow: hidden;
-          background: #111;
+          background: var(--m3-primary-container);
+          flex-shrink: 0;
         }
-        .v2-music-initial { font-family: var(--font-mono); font-size: 12px; color: var(--color-ink-dim); }
+        .v2-music-initial { font-size: 14px; color: var(--m3-primary); font-weight: 600; }
         .v2-music-meta { display: flex; flex-direction: column; min-width: 0; }
         .v2-music-label {
-          display: flex; align-items: center; gap: 0.5rem;
-          font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.18em; color: var(--color-ink-mute);
+          display: flex; align-items: center; gap: 0.4rem;
+          font-size: 10px; letter-spacing: 0.12em; color: var(--m3-on-surface-variant); text-transform: uppercase;
         }
-        .v2-music-title { font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .v2-music-artist { font-family: var(--font-mono); font-size: 10px; font-weight: 400; color: var(--color-ink-mute); margin-left: 0.375rem; }
-        .v2-music-count { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 10px; color: var(--color-ink-mute); }
-        .v2-ico { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--color-line-2); color: var(--color-ink); }
+        .v2-music-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .v2-music-artist { font-size: 11px; font-weight: 400; color: var(--m3-on-surface-variant); margin-left: 0.25rem; }
+        .v2-music-count { display: flex; align-items: center; gap: 0.375rem; font-size: 12px; color: var(--m3-on-surface-variant); }
+        .v2-ico {
+          display: grid; place-items: center;
+          width: 44px; height: 44px;
+          border-radius: 12px;
+          background: var(--m3-primary-container);
+          color: var(--m3-primary);
+          flex-shrink: 0;
+        }
         .v2-link-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-        .v2-link-label { font-size: 13.5px; font-weight: 600; letter-spacing: 0.04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .v2-link-sub { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em; color: var(--color-ink-mute); }
-        .v2-arrow { font-family: var(--font-mono); color: var(--color-ink-mute); transition: transform 0.2s, color 0.2s; }
-        .link-card:hover .v2-arrow { transform: translateX(4px); color: var(--color-ink); }
+        .v2-link-label { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .v2-link-sub { font-size: 12px; color: var(--m3-on-surface-variant); }
+        .v2-chevron { color: var(--m3-on-surface-variant); display: flex; align-items: center; }
         .v2-footer {
           display: flex; align-items: center; padding-top: 0.75rem;
-          font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em; color: var(--color-ink-mute);
+          font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; color: var(--m3-on-surface-variant);
         }
         .v2-foot-spacer { flex: 1; }
         .v2-ab-banner {
@@ -399,12 +413,12 @@ export default function PageV2() {
           bottom: 0; left: 0; right: 0;
           z-index: 50;
           padding: 0.5rem 1rem;
-          background: rgba(17,17,17,0.85);
-          border-top: 1px solid var(--color-line);
+          background: rgba(28,27,31,0.92);
+          border-top: 1px solid var(--m3-outline-variant);
           font-family: var(--font-mono);
           font-size: 10.5px;
-          letter-spacing: 0.12em;
-          color: var(--color-ink-mute);
+          letter-spacing: 0.1em;
+          color: var(--m3-on-surface-variant);
           text-align: center;
           backdrop-filter: blur(8px);
         }
