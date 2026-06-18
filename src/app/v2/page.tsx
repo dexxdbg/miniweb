@@ -400,7 +400,7 @@ export default function PageV2() {
           display: grid; place-items: center;
           width: 44px; height: 44px;
           border-radius: 12px;
-          background: #4f378b;
+          background: #4f378b !important;
           color: #d0bcff;
           flex-shrink: 0;
         }
@@ -413,6 +413,8 @@ export default function PageV2() {
           font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; color: var(--m3-on-surface-variant);
         }
         .v2-foot-spacer { flex: 1; }
+        .v2-link.link-card, .v2-music-bar.link-card { overflow: hidden; }
+        .v2-link.link-card .ico-box { background: #4f378b !important; }
         .v2-ab-banner {
           position: fixed;
           bottom: 0; left: 0; right: 0;
