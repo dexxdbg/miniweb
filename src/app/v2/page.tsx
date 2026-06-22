@@ -16,9 +16,13 @@ import {
 
 // Register @material/web components (client-side only)
 if (typeof window !== "undefined") {
-  import("@material/web/chips/assist-chip.js");
-  import("@material/web/chips/chip-set.js");
-  import("@material/web/divider/divider.js");
+  Promise.all([
+    import("@material/web/chips/assist-chip.js"),
+    import("@material/web/chips/chip-set.js"),
+    import("@material/web/divider/divider.js"),
+  ]).catch((err) => {
+    console.error("[v2] failed to load Material Web components:", err);
+  });
 }
 
 function pad(n: number) {

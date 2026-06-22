@@ -4,7 +4,11 @@ import dynamic from "next/dynamic";
 
 // Load only on client; the package requires DOM access.
 const Agentation = dynamic(
-  () => import("agentation").then((m) => m.Agentation),
+  () =>
+    import("agentation").then((m) => m.Agentation).catch((err) => {
+      console.error("[dev] failed to load Agentation:", err);
+      return () => null;
+    }),
   { ssr: false }
 );
 

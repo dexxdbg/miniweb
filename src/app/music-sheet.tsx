@@ -44,10 +44,14 @@ export function MusicSheet({
     a.pause();
     if (track?.audio && open) {
       a.currentTime = 0;
-      // try autoplay; ignore errors (browser policy)
       a.play()
         .then(() => setPlaying(true))
-        .catch(() => setPlaying(false));
+        .catch((err: DOMException) => {
+          if (err.name !== "NotAllowedError") {
+            console.error("[music] autoplay failed:", err.message);
+          }
+          setPlaying(false);
+        });
     }
   }, [track, open]);
 
@@ -70,7 +74,10 @@ export function MusicSheet({
     if (a.paused) {
       a.play()
         .then(() => setPlaying(true))
-        .catch(() => setPlaying(false));
+        .catch((err: DOMException) => {
+          console.error("[music] playback failed:", err.message);
+          setPlaying(false);
+        });
     } else {
       a.pause();
       setPlaying(false);
