@@ -54,6 +54,7 @@ async function main() {
   const queries = await loadQueries();
   /** @type {any[]} */
   const tracks = [];
+  let failures = 0;
   for (const entry of queries) {
     const q = typeof entry === "string" ? entry : entry.query;
     const meta = typeof entry === "string" ? {} : entry;
@@ -62,6 +63,7 @@ async function main() {
       const r = await search(q);
       if (!r) {
         console.log("no result");
+        failures++;
         continue;
       }
       tracks.push({
@@ -79,11 +81,19 @@ async function main() {
       });
       console.log(`ok  (${r.trackName} — ${r.artistName})`);
     } catch (e) {
-      console.log(`fail (${e instanceof Error ? e.message : String(e)})`);
+      failures++;
+      console.error(`fail (${e instanceof Error ? e.message : String(e)})`);
     }
   }
   await writeFile(outPath, JSON.stringify({ tracks }, null, 2) + "\n", "utf8");
   console.log(`\nwrote ${tracks.length} track(s) → ${outPath}`);
+  if (failures > 0) {
+    console.error(`⚠ ${failures}/${queries.length} track(s) failed to resolve`);
+  }
+  if (tracks.length === 0 && queries.length > 0) {
+    console.error("error: all tracks failed to resolve");
+    process.exit(1);
+  }
 }
 
 main().catch((e) => {

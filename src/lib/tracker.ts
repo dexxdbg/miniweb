@@ -18,12 +18,19 @@ function getSession() {
 function track(event: string, data?: Record<string, unknown>) {
   const variant =
     document.cookie.match(/ab_variant=([^;]+)/)?.[1] ?? "unknown";
-  supabase.from("analytics").insert({
-    variant,
-    session_id: getSession(),
-    event,
-    data: data ?? {},
-  });
+  supabase
+    .from("analytics")
+    .insert({
+      variant,
+      session_id: getSession(),
+      event,
+      data: data ?? {},
+    })
+    .then(({ error }) => {
+      if (error) {
+        console.error(`[tracker] failed to record "${event}":`, error.message);
+      }
+    });
 }
 
 export function initTracker() {
