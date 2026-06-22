@@ -7,6 +7,7 @@ import type { MusicTrack } from "./config";
 import musicGenerated from "./music.generated.json";
 import { MusicSheet } from "./music-sheet";
 import { Icons, isIconKey } from "./icons";
+import { pad, buildHash } from "@/lib/helpers";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -18,18 +19,6 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 
-
-function pad(n: number) {
-  return String(n).padStart(2, "0");
-}
-
-function buildHash(s: string) {
-  return Math.abs(
-    [...s].reduce((a, c) => a + c.charCodeAt(0), 0) % 999
-  )
-    .toString()
-    .padStart(3, "0");
-}
 
 function renderIcon(icon?: string) {
   if (!icon) {

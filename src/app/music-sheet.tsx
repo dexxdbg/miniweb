@@ -10,13 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import type { MusicTrack } from "./config";
-
-function fmt(s: number) {
-  if (!isFinite(s) || s < 0) s = 0;
-  const m = Math.floor(s / 60);
-  const r = Math.floor(s % 60);
-  return `${m}:${r.toString().padStart(2, "0")}`;
-}
+import { fmt } from "@/lib/helpers";
 
 export function MusicSheet({
   track,
