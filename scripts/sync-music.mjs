@@ -40,13 +40,19 @@ async function loadQueries() {
     const mod = await import(pathToFileURL(listPath).href);
     return mod.musicQueries ?? [];
   } catch {
-    // fallback: read file, strip TS, eval
+    // fallback: read file, strip TS types, and parse with JSON
     const { readFile } = await import("node:fs/promises");
     const src = await readFile(listPath, "utf8");
     const m = src.match(/musicQueries\s*:\s*MusicQuery\[\]\s*=\s*(\[[\s\S]*?\]);/);
     if (!m) throw new Error("Could not parse music.list.ts");
-    // eslint-disable-next-line no-eval
-    return eval(m[1]);
+    // Convert JS object literal to JSON: quote unquoted keys, trailing commas
+    let raw = m[1];
+    raw = raw.replace(/\/\/[^\n]*/g, "");              // strip line comments
+    raw = raw.replace(/\/\*[\s\S]*?\*\//g, "");        // strip block comments
+    raw = raw.replace(/(\w+)\s*:/g, '"$1":');           // quote unquoted keys
+    raw = raw.replace(/'/g, '"');                       // single → double quotes
+    raw = raw.replace(/,\s*([\]}])/g, "$1");            // strip trailing commas
+    return JSON.parse(raw);
   }
 }
 

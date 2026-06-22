@@ -1,10 +1,15 @@
 "use client";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  "https://ynwvgponhtotziietmeu.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlud3ZncG9uaHRvdHppaWV0bWV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MDYwMDcsImV4cCI6MjA5NzM4MjAwN30.VIdNfMOqUc4F9kiQ40U1ExkeD2gfc36CTBBMqeLksIM"
-);
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+
+let supabase: SupabaseClient | null = null;
+function getSupabase(): SupabaseClient | null {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
+  if (!supabase) supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  return supabase;
+}
 
 function getSession() {
   let id = sessionStorage.getItem("sid");
@@ -15,14 +20,34 @@ function getSession() {
   return id;
 }
 
+function sanitize(value: unknown, maxLen = 200): unknown {
+  if (typeof value === "string") return value.slice(0, maxLen);
+  if (typeof value === "number" || typeof value === "boolean" || value === null)
+    return value;
+  return undefined;
+}
+
+function sanitizeRecord(
+  obj: Record<string, unknown>,
+): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(obj)) {
+    const clean = sanitize(v);
+    if (clean !== undefined) out[k] = clean;
+  }
+  return out;
+}
+
 function track(event: string, data?: Record<string, unknown>) {
+  const client = getSupabase();
+  if (!client) return;
   const variant =
     document.cookie.match(/ab_variant=([^;]+)/)?.[1] ?? "unknown";
-  supabase.from("analytics").insert({
-    variant,
+  client.from("analytics").insert({
+    variant: sanitize(variant),
     session_id: getSession(),
-    event,
-    data: data ?? {},
+    event: sanitize(event, 50),
+    data: data ? sanitizeRecord(data) : {},
   });
 }
 
