@@ -40,13 +40,14 @@ async function loadQueries() {
     const mod = await import(pathToFileURL(listPath).href);
     return mod.musicQueries ?? [];
   } catch {
-    // fallback: read file, strip TS, eval
+    // fallback: read file, strip TS types, parse the array literal safely
     const { readFile } = await import("node:fs/promises");
     const src = await readFile(listPath, "utf8");
     const m = src.match(/musicQueries\s*:\s*MusicQuery\[\]\s*=\s*(\[[\s\S]*?\]);/);
     if (!m) throw new Error("Could not parse music.list.ts");
-    // eslint-disable-next-line no-eval
-    return eval(m[1]);
+    // Use Function constructor (isolated scope, no access to local variables)
+    // instead of eval (which leaks the entire scope).
+    return new Function(`return ${m[1]}`)();
   }
 }
 
