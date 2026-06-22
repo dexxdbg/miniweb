@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { siteConfig } from "./config";
 import type { MusicTrack } from "./config";
-import musicGenerated from "./music.generated.json";
 import { MusicSheet } from "./music-sheet";
-import { Icons, isIconKey } from "./icons";
+import { buildHash, getInitials, getMusicTracks, getVisibilityFlags } from "@/lib/utils";
+import { useClock } from "@/hooks/use-clock";
+import { RenderIcon } from "@/components/render-icon";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -19,72 +20,18 @@ import {
 } from "@/components/ui/sheet";
 
 
-function pad(n: number) {
-  return String(n).padStart(2, "0");
-}
-
-function buildHash(s: string) {
-  return Math.abs(
-    [...s].reduce((a, c) => a + c.charCodeAt(0), 0) % 999
-  )
-    .toString()
-    .padStart(3, "0");
-}
-
-function renderIcon(icon?: string) {
-  if (!icon) {
-    const I = Icons.link;
-    return <I />;
-  }
-  if (isIconKey(icon)) {
-    const I = Icons[icon];
-    return <I />;
-  }
-  return <span className="font-mono text-[14px] leading-none">{icon}</span>;
-}
-
 export default function Page() {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [time, setTime] = useState("--:--:--");
-  const [mounted, setMounted] = useState(false);
+  const { time, mounted } = useClock();
   const [activeTrack, setActiveTrack] = useState<MusicTrack | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [listOpen, setListOpen] = useState(false);
 
   const c = siteConfig;
-  const musicTracks: MusicTrack[] = [
-    ...((musicGenerated as { tracks: MusicTrack[] }).tracks ?? []),
-    ...(c.music ?? []),
-  ];
-  const initials = (
-    c.initials ||
-    c.name.replace(/[^A-Za-z0-9]/g, "").slice(0, 2) ||
-    "?"
-  ).toUpperCase();
+  const musicTracks = getMusicTracks(c);
+  const initials = getInitials(c);
   const build = buildHash(c.name);
-
-  const showHeader = c.showHeader !== false;
-  const showFooter = c.showFooter !== false;
-  const showProfile = c.showProfile !== false;
-  const showAvatar = showProfile && c.showAvatar !== false;
-  const showName = showProfile && c.showName !== false;
-  const showBio = showProfile && c.showBio !== false && !!c.bio;
-  const showTags =
-    showProfile && c.showTags !== false && !!c.tags && c.tags.length > 0;
-  const profileVisible = showAvatar || showName || showBio || showTags;
-
-  useEffect(() => {
-    setMounted(true);
-    const tick = () => {
-      const d = new Date();
-      setTime(
-        `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
-      );
-    };
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
+  const { showHeader, showFooter, showAvatar, showName, showBio, showTags, profileVisible } = getVisibilityFlags(c);
 
   useEffect(() => {
     if (!mounted) return;
@@ -259,7 +206,7 @@ export default function Page() {
               style={{ animationDelay: `${0.1 + i * 0.06}s` }}
             >
               <span className="ico-box grid h-9 w-9 place-items-center rounded-lg border border-[var(--color-line-2)] text-foreground">
-                {renderIcon(l.icon)}
+                <RenderIcon icon={l.icon} />
               </span>
               <span className="flex min-w-0 flex-col gap-0.5 text-left">
                 <span className="truncate text-[13.5px] font-semibold tracking-wide text-foreground">

@@ -9,13 +9,14 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
+import { pad } from "@/lib/utils";
 import type { MusicTrack } from "./config";
 
 function fmt(s: number) {
   if (!isFinite(s) || s < 0) s = 0;
   const m = Math.floor(s / 60);
   const r = Math.floor(s % 60);
-  return `${m}:${r.toString().padStart(2, "0")}`;
+  return `${m}:${pad(r)}`;
 }
 
 export function MusicSheet({
