@@ -40,19 +40,14 @@ async function loadQueries() {
     const mod = await import(pathToFileURL(listPath).href);
     return mod.musicQueries ?? [];
   } catch {
-    // fallback: read file, strip TS types, and parse with JSON
+    // fallback: read file, strip TS types, parse the array literal safely
     const { readFile } = await import("node:fs/promises");
     const src = await readFile(listPath, "utf8");
     const m = src.match(/musicQueries\s*:\s*MusicQuery\[\]\s*=\s*(\[[\s\S]*?\]);/);
     if (!m) throw new Error("Could not parse music.list.ts");
-    // Convert JS object literal to JSON: quote unquoted keys, trailing commas
-    let raw = m[1];
-    raw = raw.replace(/\/\/[^\n]*/g, "");              // strip line comments
-    raw = raw.replace(/\/\*[\s\S]*?\*\//g, "");        // strip block comments
-    raw = raw.replace(/(\w+)\s*:/g, '"$1":');           // quote unquoted keys
-    raw = raw.replace(/'/g, '"');                       // single → double quotes
-    raw = raw.replace(/,\s*([\]}])/g, "$1");            // strip trailing commas
-    return JSON.parse(raw);
+    // Use Function constructor (isolated scope, no access to local variables)
+    // instead of eval (which leaks the entire scope).
+    return new Function(`return ${m[1]}`)();
   }
 }
 
