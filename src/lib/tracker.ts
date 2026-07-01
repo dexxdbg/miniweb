@@ -16,10 +16,7 @@ function getSession() {
 }
 
 function track(event: string, data?: Record<string, unknown>) {
-  const variant =
-    document.cookie.match(/ab_variant=([^;]+)/)?.[1] ?? "unknown";
   supabase.from("analytics").insert({
-    variant,
     session_id: getSession(),
     event,
     data: data ?? {},
