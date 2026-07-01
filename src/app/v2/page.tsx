@@ -26,9 +26,7 @@ function pad(n: number) {
 }
 
 function buildHash(s: string) {
-  return Math.abs(
-    [...s].reduce((a, c) => a + c.charCodeAt(0), 0) % 999
-  )
+  return Math.abs([...s].reduce((a, c) => a + c.charCodeAt(0), 0) % 999)
     .toString()
     .padStart(3, "0");
 }
@@ -70,13 +68,16 @@ export default function PageV2() {
   const showAvatar = showProfile && c.showAvatar !== false;
   const showName = showProfile && c.showName !== false;
   const showBio = showProfile && c.showBio !== false && !!c.bio;
-  const showTags = showProfile && c.showTags !== false && !!c.tags && c.tags.length > 0;
+  const showTags =
+    showProfile && c.showTags !== false && !!c.tags && c.tags.length > 0;
 
   useEffect(() => {
     setMounted(true);
     const tick = () => {
       const d = new Date();
-      setTime(`${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`);
+      setTime(
+        `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`,
+      );
     };
     tick();
     const id = setInterval(tick, 1000);
@@ -89,7 +90,10 @@ export default function PageV2() {
 
   return (
     <div className="v2-root">
-      <div className="v2-ab-banner">⚗ you're seeing a test version of this site via a/b testing. your activity may be used for testing.</div>
+      <div className="v2-ab-banner">
+        ⚗ you're seeing a test version of this site via a/b testing. your
+        activity may be used for testing.
+      </div>
 
       <main className="v2-card">
         {showHeader && (
@@ -114,7 +118,13 @@ export default function PageV2() {
                 <div className="avatar-ring" />
                 <div className="v2-avatar">
                   {c.avatar ? (
-                    <Image src={c.avatar} alt={c.name} fill sizes="96px" className="object-cover" />
+                    <Image
+                      src={c.avatar}
+                      alt={c.name}
+                      fill
+                      sizes="96px"
+                      className="object-cover"
+                    />
                   ) : (
                     <span className="v2-avatar-initials">{initials}</span>
                   )}
@@ -143,9 +153,17 @@ export default function PageV2() {
               >
                 <span className="v2-music-cover">
                   {featured.cover ? (
-                    <Image src={featured.cover} alt={featured.title} fill sizes="36px" className="object-cover" />
+                    <Image
+                      src={featured.cover}
+                      alt={featured.title}
+                      fill
+                      sizes="36px"
+                      className="object-cover"
+                    />
                   ) : (
-                    <span className="v2-music-initial">{featured.title[0]}</span>
+                    <span className="v2-music-initial">
+                      {featured.title[0]}
+                    </span>
                   )}
                 </span>
                 <span className="v2-music-meta">
@@ -155,12 +173,24 @@ export default function PageV2() {
                   </span>
                   <span className="v2-music-title">
                     {featured.title}
-                    <span className="v2-music-artist"> · {featured.artist}</span>
+                    <span className="v2-music-artist">
+                      {" "}
+                      · {featured.artist}
+                    </span>
                   </span>
                 </span>
                 <span className="v2-music-count">
                   <span>{musicTracks.length}</span>
-                  <span className="v2-chevron"><svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></span>
+                  <span className="v2-chevron">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width={18}
+                      height={18}
+                      fill="currentColor"
+                    >
+                      <path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                    </svg>
+                  </span>
                 </span>
               </button>
               <md-divider className="v2-link-divider" />
@@ -181,9 +211,26 @@ export default function PageV2() {
                 <span className="v2-link-label">{l.label}</span>
                 {l.sub && <span className="v2-link-sub">{l.sub}</span>}
               </span>
-              <span className="v2-chevron"><svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></span>
+              <span className="v2-chevron">
+                <svg
+                  viewBox="0 0 24 24"
+                  width={18}
+                  height={18}
+                  fill="currentColor"
+                >
+                  <path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                </svg>
+              </span>
             </a>
           ))}
+          <iframe
+            src="https://dw.dexx.moe/widget?f=auto"
+            width="100%"
+            height="60"
+            style={{ border: "1px solid #3a2a10", background: "#0a0805" }}
+            title="DWing webring"
+            loading="lazy"
+          ></iframe>
         </nav>
 
         {showFooter && (
@@ -205,10 +252,16 @@ export default function PageV2() {
           style={{ background: "#211f26" }}
         >
           <div className="mx-auto -mt-2 mb-3 h-1 w-10 rounded-full bg-[var(--color-line-2)]" />
-          <SheetTitle className="font-mono text-[16px] font-semibold tracking-wide" style={{ color: "#e6e1e5" }}>
+          <SheetTitle
+            className="font-mono text-[16px] font-semibold tracking-wide"
+            style={{ color: "#e6e1e5" }}
+          >
             {c.musicTitle ?? "music"}
           </SheetTitle>
-          <SheetDescription className="font-mono text-[10.5px] tracking-[0.18em]" style={{ color: "#938f99" }}>
+          <SheetDescription
+            className="font-mono text-[10.5px] tracking-[0.18em]"
+            style={{ color: "#938f99" }}
+          >
             {musicTracks.length} track{musicTracks.length === 1 ? "" : "s"}
           </SheetDescription>
           <div className="mt-3 flex max-h-[60vh] flex-col gap-2 overflow-y-auto pr-1">
@@ -228,16 +281,30 @@ export default function PageV2() {
                 >
                   <span className="ico-box relative grid h-11 w-11 place-items-center overflow-hidden rounded-lg border border-[var(--color-line-2)]">
                     {t.cover ? (
-                      <Image src={t.cover} alt={t.title} fill sizes="44px" className="object-cover" />
+                      <Image
+                        src={t.cover}
+                        alt={t.title}
+                        fill
+                        sizes="44px"
+                        className="object-cover"
+                      />
                     ) : (
-                      <span className="font-mono text-[14px] text-[var(--color-ink-dim)]">{ini}</span>
+                      <span className="font-mono text-[14px] text-[var(--color-ink-dim)]">
+                        {ini}
+                      </span>
                     )}
                   </span>
                   <span className="flex min-w-0 flex-col gap-0.5 text-left">
-                    <span className="truncate text-[13.5px] font-semibold tracking-wide text-foreground">{t.title}</span>
-                    <span className="truncate font-mono text-[10.5px] tracking-[0.14em] text-[var(--color-ink-mute)]">{t.artist}</span>
+                    <span className="truncate text-[13.5px] font-semibold tracking-wide text-foreground">
+                      {t.title}
+                    </span>
+                    <span className="truncate font-mono text-[10.5px] tracking-[0.14em] text-[var(--color-ink-mute)]">
+                      {t.artist}
+                    </span>
                   </span>
-                  <span className="font-mono text-[var(--color-ink-mute)]">▶</span>
+                  <span className="font-mono text-[var(--color-ink-mute)]">
+                    ▶
+                  </span>
                 </button>
               );
             })}
@@ -251,7 +318,10 @@ export default function PageV2() {
         onOpenChange={setSheetOpen}
         onBack={
           musicTracks.length > 1
-            ? () => { setSheetOpen(false); setListOpen(true); }
+            ? () => {
+                setSheetOpen(false);
+                setListOpen(true);
+              }
             : undefined
         }
       />

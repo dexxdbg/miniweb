@@ -18,15 +18,12 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 
-
 function pad(n: number) {
   return String(n).padStart(2, "0");
 }
 
 function buildHash(s: string) {
-  return Math.abs(
-    [...s].reduce((a, c) => a + c.charCodeAt(0), 0) % 999
-  )
+  return Math.abs([...s].reduce((a, c) => a + c.charCodeAt(0), 0) % 999)
     .toString()
     .padStart(3, "0");
 }
@@ -78,7 +75,7 @@ export default function Page() {
     const tick = () => {
       const d = new Date();
       setTime(
-        `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+        `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`,
       );
     };
     tick();
@@ -101,7 +98,7 @@ export default function Page() {
         const x = (e.clientX - r.left - r.width / 2) / r.width;
         const y = (e.clientY - r.top - r.height / 2) / r.height;
         el.style.transform = `perspective(1200px) rotateX(${(-y * 2).toFixed(
-          2
+          2,
         )}deg) rotateY(${(x * 2).toFixed(2)}deg)`;
         raf = 0;
       });
@@ -194,56 +191,58 @@ export default function Page() {
         )}
 
         <nav className="my-5 flex flex-col gap-2.5">
-          {musicTracks.length > 0 && (() => {
-            const featured = musicTracks.find((t) => t.featured) ?? musicTracks[0];
-            const initials = featured.title.slice(0, 1).toUpperCase();
-            return (
-              <button
-                type="button"
-                onClick={() => setListOpen(true)}
-                className="link-card link-in group relative grid w-full grid-cols-[36px_1fr_auto] items-center gap-3 overflow-hidden rounded-xl border border-[var(--color-line)] px-3 py-2 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-                style={{ animationDelay: "0.05s" }}
-              >
-                <span className="ico-box relative grid h-9 w-9 place-items-center overflow-hidden rounded-lg border border-[var(--color-line-2)]">
-                  {featured.cover ? (
-                    <Image
-                      src={featured.cover}
-                      alt={`${featured.title} cover`}
-                      fill
-                      sizes="36px"
-                      className="object-cover"
-                    />
-                  ) : (
-                    <span className="font-mono text-[12px] text-[var(--color-ink-dim)]">
-                      {initials}
+          {musicTracks.length > 0 &&
+            (() => {
+              const featured =
+                musicTracks.find((t) => t.featured) ?? musicTracks[0];
+              const initials = featured.title.slice(0, 1).toUpperCase();
+              return (
+                <button
+                  type="button"
+                  onClick={() => setListOpen(true)}
+                  className="link-card link-in group relative grid w-full grid-cols-[36px_1fr_auto] items-center gap-3 overflow-hidden rounded-xl border border-[var(--color-line)] px-3 py-2 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                  style={{ animationDelay: "0.05s" }}
+                >
+                  <span className="ico-box relative grid h-9 w-9 place-items-center overflow-hidden rounded-lg border border-[var(--color-line-2)]">
+                    {featured.cover ? (
+                      <Image
+                        src={featured.cover}
+                        alt={`${featured.title} cover`}
+                        fill
+                        sizes="36px"
+                        className="object-cover"
+                      />
+                    ) : (
+                      <span className="font-mono text-[12px] text-[var(--color-ink-dim)]">
+                        {initials}
+                      </span>
+                    )}
+                  </span>
+                  <span className="flex min-w-0 flex-col gap-0 text-left">
+                    <span className="flex items-center gap-2">
+                      <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-foreground" />
+                      <span className="font-mono text-[9.5px] tracking-[0.18em] text-[var(--color-ink-mute)]">
+                        {c.musicTitle ?? "now spinning"}
+                      </span>
                     </span>
-                  )}
-                </span>
-                <span className="flex min-w-0 flex-col gap-0 text-left">
-                  <span className="flex items-center gap-2">
-                    <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-foreground" />
-                    <span className="font-mono text-[9.5px] tracking-[0.18em] text-[var(--color-ink-mute)]">
-                      {c.musicTitle ?? "now spinning"}
+                    <span className="truncate text-[12.5px] font-semibold tracking-wide text-foreground">
+                      {featured.title}
+                      <span className="ml-1.5 font-mono text-[10px] font-normal text-[var(--color-ink-mute)]">
+                        · {featured.artist}
+                      </span>
                     </span>
                   </span>
-                  <span className="truncate text-[12.5px] font-semibold tracking-wide text-foreground">
-                    {featured.title}
-                    <span className="ml-1.5 font-mono text-[10px] font-normal text-[var(--color-ink-mute)]">
-                      · {featured.artist}
+                  <span className="flex items-center gap-2 text-[var(--color-ink-mute)]">
+                    <span className="font-mono text-[10px] tracking-[0.14em]">
+                      {musicTracks.length}
+                    </span>
+                    <span className="transition-all duration-300 group-hover:translate-x-1 group-hover:text-foreground">
+                      →
                     </span>
                   </span>
-                </span>
-                <span className="flex items-center gap-2 text-[var(--color-ink-mute)]">
-                  <span className="font-mono text-[10px] tracking-[0.14em]">
-                    {musicTracks.length}
-                  </span>
-                  <span className="transition-all duration-300 group-hover:translate-x-1 group-hover:text-foreground">
-                    →
-                  </span>
-                </span>
-              </button>
-            );
-          })()}
+                </button>
+              );
+            })()}
 
           {musicTracks.length > 0 && (
             <Separator className="my-1 border-dashed bg-transparent border-t border-[var(--color-line)]" />
@@ -276,6 +275,14 @@ export default function Page() {
               </span>
             </a>
           ))}
+          <iframe
+            src="https://dw.dexx.moe/widget?f=auto"
+            width="100%"
+            height="60"
+            style={{ border: "1px solid #3a2a10", background: "#0a0805" }}
+            title="DWing webring"
+            loading="lazy"
+          ></iframe>
         </nav>
 
         {showFooter && (
