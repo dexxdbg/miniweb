@@ -226,7 +226,7 @@ export default function PageV2() {
           <iframe
             src="https://dw.dexx.moe/widget?f=auto"
             width="100%"
-            height="60"
+            height="80"
             style={{ border: "1px solid #3a2a10", background: "#0a0805" }}
             title="DWing webring"
             loading="lazy"
