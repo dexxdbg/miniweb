@@ -8,8 +8,8 @@ const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "mini/web — @dexxdbg",
-  description: "The personal index of @dexxdbg — work, sound and places elsewhere on the web.",
+  title: "@dexxdbg",
+  description: "Links & music from @dexxdbg.",
 };
 
 export default function RootLayout({

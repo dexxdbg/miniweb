@@ -71,7 +71,7 @@ export function MusicSheet({
           </div>
 
           <div className="player-copy">
-            <SheetDescription>Now on mini/web</SheetDescription>
+            <SheetDescription>Now playing</SheetDescription>
             <SheetTitle>{track.title}</SheetTitle>
             <p>{track.artist}</p>
             {track.tag && <span className="track-tag">{track.tag}</span>}
@@ -104,15 +104,15 @@ export function MusicSheet({
                   <div><span>{formatTime(currentTime)}</span><span>{formatTime(duration)}</span></div>
                 </div>
                 <div className="player-actions">
-                  {onBack && <button type="button" onClick={onBack}>← list</button>}
-                  <button className="primary-play" type="button" onClick={togglePlayback}>{playing ? "PAUSE" : "PLAY"}</button>
-                  <a href={track.url} target="_blank" rel="noopener noreferrer">source ↗</a>
+                  {onBack && <button type="button" onClick={onBack}>← List</button>}
+                  <button className="primary-play" type="button" onClick={togglePlayback}>{playing ? "Pause" : "Play"}</button>
+                  <a href={track.url} target="_blank" rel="noopener noreferrer">Source ↗</a>
                 </div>
               </>
             ) : (
               <div className="player-actions">
-                {onBack && <button type="button" onClick={onBack}>← list</button>}
-                <a className="primary-play" href={track.url} target="_blank" rel="noopener noreferrer">OPEN ↗</a>
+                {onBack && <button type="button" onClick={onBack}>← List</button>}
+                <a className="primary-play" href={track.url} target="_blank" rel="noopener noreferrer">Open ↗</a>
               </div>
             )}
           </div>

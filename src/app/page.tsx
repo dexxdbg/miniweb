@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import { siteConfig, type MusicTrack } from "./config";
 import musicGenerated from "./music.generated.json";
-import { Icons, isIconKey } from "./icons";
 import { MusicSheet } from "./music-sheet";
 import {
   Sheet,
@@ -13,29 +12,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-function pad(value: number) {
-  return String(value).padStart(2, "0");
-}
-
-function getTime() {
-  const now = new Date();
-  return `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-}
-
-function renderIcon(icon?: string) {
-  if (icon && isIconKey(icon)) {
-    const Icon = Icons[icon];
-    return <Icon aria-hidden="true" />;
-  }
-
-  if (icon) return <span className="fallback-icon">{icon}</span>;
-  const Icon = Icons.link;
-  return <Icon aria-hidden="true" />;
-}
-
 export default function Page() {
   const config = siteConfig;
-  const [time, setTime] = useState("--:--:--");
   const [activeTrack, setActiveTrack] = useState<MusicTrack | null>(null);
   const [trackListOpen, setTrackListOpen] = useState(false);
   const [playerOpen, setPlayerOpen] = useState(false);
@@ -48,167 +26,84 @@ export default function Page() {
     [config.music],
   );
 
-  useEffect(() => {
-    const interval = window.setInterval(() => setTime(getTime()), 1000);
-    return () => window.clearInterval(interval);
-  }, []);
-
   const featured = tracks.find((track) => track.featured) ?? tracks[0];
   const handle = config.name.replace(/^@/, "");
-  const initials = (config.initials || handle.slice(0, 3) || "???").toUpperCase();
+  const initials = (config.initials || handle.slice(0, 2) || "??").toUpperCase();
   const showProfile = config.showProfile !== false;
   const showAvatar = showProfile && config.showAvatar !== false;
 
   return (
-    <main className="index-page">
-      <div className="index-frame">
+    <main className="site-shell" id="top">
+      <div className="site-content">
         {config.showHeader !== false && (
-          <header className="masthead">
-            <a className="wordmark" href="#top" aria-label="Back to top">
-              mini/web<span>®</span>
-            </a>
-            <p className="masthead-note">personal index · ua / internet</p>
-            <div className="live-clock">
-              <span className="live-dot" aria-hidden="true" />
-              <span>online</span>
-              <time suppressHydrationWarning>{time}</time>
-            </div>
+          <header className="site-header">
+            <a href="#top" className="site-mark">miniweb</a>
+            <span>Ukraine</span>
           </header>
         )}
 
-        <section className={`identity${showAvatar ? "" : " identity-wide"}`} id="top" aria-labelledby="page-title">
-          <div className="identity-copy">
-            <p className="section-kicker">01 / identity</p>
-            {showProfile && config.showName !== false && (
-              <h1 id="page-title" className="display-name">
-                <span>@</span>{handle}
-              </h1>
-            )}
-            {showProfile && config.showBio !== false && config.bio && (
-              <div className="bio-row">
-                <span className="bio-mark">↳</span>
-                <p>{config.bio}</p>
-              </div>
-            )}
-            {showProfile && config.showTags !== false && config.tags && config.tags.length > 0 && (
-              <ul className="tag-list" aria-label="Profile tags">
-                {config.tags.map((tag) => <li key={tag}>{tag}</li>)}
-              </ul>
-            )}
-          </div>
-
-          {showAvatar && (
-            <figure className="portrait">
-              <div className="portrait-image">
+        {showProfile && (
+          <section className="profile" aria-labelledby="page-title">
+            {showAvatar && (
+              <div className="avatar">
                 {config.avatar ? (
-                  <Image
-                    src={config.avatar}
-                    alt={config.name}
-                    fill
-                    priority
-                    sizes="(max-width: 760px) 100vw, 38vw"
-                    className="portrait-photo"
-                  />
+                  <Image src={config.avatar} alt="" fill priority sizes="64px" className="avatar-image" />
                 ) : (
-                  <span className="portrait-initials">{initials}</span>
+                  <span>{initials}</span>
                 )}
               </div>
-              <figcaption>
-                <span>FIG. 001</span>
-                <span>DO NOT ADJUST</span>
-              </figcaption>
-              <span className="portrait-stamp" aria-hidden="true">MW/26</span>
-            </figure>
-          )}
-        </section>
-
-        <div className="content-grid">
-          <section className="links-panel" aria-labelledby="links-title">
-            <div className="section-head">
-              <p className="section-kicker">02 / departures</p>
-              <h2 id="links-title">Elsewhere</h2>
-              <span>{String(config.links.length).padStart(2, "0")} links</span>
-            </div>
-            <nav className="link-list" aria-label="Social links">
-              {config.links.map((link, index) => (
-                <a
-                  key={`${link.url}-${index}`}
-                  className="index-link"
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className="link-number">{pad(index + 1)}</span>
-                  <span className="link-icon">{renderIcon(link.icon)}</span>
-                  <span className="link-title">{link.label}</span>
-                  <span className="link-address">{link.sub || new URL(link.url).hostname}</span>
-                  <span className="link-arrow" aria-hidden="true">↗</span>
-                </a>
-              ))}
-            </nav>
-          </section>
-
-          <aside className="side-panel">
-            <section className="sound-block" aria-labelledby="sound-title">
-              <div className="side-title">
-                <p className="section-kicker">03 / sound</p>
-                <span className="sound-bars" aria-hidden="true"><i /><i /><i /><i /></span>
-              </div>
-              <h2 id="sound-title">On rotation</h2>
-              {featured ? (
-                <button className="featured-track" type="button" onClick={() => setTrackListOpen(true)}>
-                  <span className="record-cover">
-                    {featured.cover ? (
-                      <Image src={featured.cover} alt="" fill sizes="112px" className="cover-image" />
-                    ) : (
-                      <span>{featured.title.slice(0, 1).toUpperCase()}</span>
-                    )}
-                  </span>
-                  <span className="track-copy">
-                    <strong>{featured.title}</strong>
-                    <span>{featured.artist}</span>
-                    <small>{tracks.length} track{tracks.length === 1 ? "" : "s"} in the crate</small>
-                  </span>
-                  <span className="play-mark" aria-hidden="true">▶</span>
-                </button>
-              ) : (
-                <p className="empty-state">silence, for now.</p>
+            )}
+            <div className="profile-copy">
+              {config.showName !== false && <h1 id="page-title">@{handle}</h1>}
+              {config.showBio !== false && config.bio && <p>{config.bio}</p>}
+              {config.showTags !== false && config.tags && config.tags.length > 0 && (
+                <span className="profile-tags">{config.tags.join(" · ")}</span>
               )}
-            </section>
+            </div>
+          </section>
+        )}
 
-            <section className="webring-block" aria-labelledby="webring-title">
-              <div className="side-title">
-                <p className="section-kicker">04 / neighborhood</p>
-                <span>www</span>
-              </div>
-              <h2 id="webring-title">Keep the web weird.</h2>
-              <iframe
-                src="https://dw.dexx.moe/widget?f=auto"
-                title="DWing webring"
-                loading="lazy"
-              />
-            </section>
-          </aside>
-        </div>
+        <nav className="link-list" aria-label="Links">
+          {config.links.map((link, index) => (
+            <a key={`${link.url}-${index}`} href={link.url} target="_blank" rel="noopener noreferrer" className="link-row">
+              <span>{link.label}</span>
+              <small>{link.sub || new URL(link.url).hostname}</small>
+              <i aria-hidden="true">↗</i>
+            </a>
+          ))}
+        </nav>
+
+        {featured && (
+          <button className="listening-row" type="button" onClick={() => setTrackListOpen(true)}>
+            <span className="listening-cover">
+              {featured.cover ? (
+                <Image src={featured.cover} alt="" fill sizes="40px" className="cover-image" />
+              ) : (
+                featured.title.slice(0, 1).toUpperCase()
+              )}
+            </span>
+            <span className="listening-copy">
+              <small>Listening</small>
+              <strong>{featured.title}</strong>
+              <span>{featured.artist}</span>
+            </span>
+            <i aria-hidden="true">›</i>
+          </button>
+        )}
 
         {config.showFooter !== false && (
-          <footer className="index-footer">
-            <p>Built by hand. Best viewed with curiosity.</p>
-            <p>© {new Date().getFullYear()} {config.name}</p>
-            <a href="#top">top ↑</a>
+          <footer className="site-footer">
+            <span>© {new Date().getFullYear()} {config.name}</span>
+            <a href="https://dw.dexx.moe" target="_blank" rel="noopener noreferrer">webring ↗</a>
           </footer>
         )}
       </div>
 
       <Sheet open={trackListOpen} onOpenChange={setTrackListOpen}>
         <SheetContent side="bottom" className="track-sheet">
-          <div className="sheet-rule" />
           <div className="sheet-heading">
-            <div>
-              <SheetDescription>mini/web audio dept.</SheetDescription>
-              <SheetTitle>{config.musicTitle ?? "On rotation"}</SheetTitle>
-            </div>
-            <span>{pad(tracks.length)} selections</span>
+            <SheetTitle>{config.musicTitle ?? "Music"}</SheetTitle>
+            <SheetDescription>{tracks.length} tracks</SheetDescription>
           </div>
           <div className="track-list">
             {tracks.map((track, index) => (
@@ -222,10 +117,10 @@ export default function Page() {
                   setPlayerOpen(true);
                 }}
               >
-                <span>{pad(index + 1)}</span>
+                <span>{String(index + 1).padStart(2, "0")}</span>
                 <strong>{track.title}</strong>
                 <small>{track.artist}</small>
-                <i>▶</i>
+                <i aria-hidden="true">›</i>
               </button>
             ))}
           </div>
