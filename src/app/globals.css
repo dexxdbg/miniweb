@@ -114,6 +114,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--signal); outlin
   min-height: 520px;
   border-bottom: 2px solid var(--ink);
 }
+.identity-wide { grid-template-columns: 1fr; }
 .identity-copy {
   display: flex;
   flex-direction: column;
@@ -158,6 +159,22 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--signal); outlin
 }
 .bio-row p { max-width: 480px; margin: 0; font-size: clamp(17px, 1.7vw, 25px); line-height: 1.15; }
 .bio-mark { color: var(--signal); font-size: 22px; }
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 18px 0 0 50px;
+  padding: 0;
+  list-style: none;
+}
+.tag-list li {
+  border: 1px solid var(--ink);
+  padding: 4px 7px;
+  font-family: var(--font-mono), monospace;
+  font-size: 8px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
 .portrait {
   position: relative;
   display: grid;
@@ -490,6 +507,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--signal); outlin
   .identity-copy { min-height: 340px; padding: 20px 16px; }
   .display-name { font-size: clamp(60px, 20vw, 118px); }
   .bio-row { grid-template-columns: 34px 1fr; margin-top: 58px; }
+  .tag-list { margin-left: 34px; }
   .portrait, .links-panel { border-left: 0; border-right: 0; }
   .portrait { border-top: 2px solid var(--ink); }
   .portrait-image { min-height: 390px; }

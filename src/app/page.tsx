@@ -56,6 +56,8 @@ export default function Page() {
   const featured = tracks.find((track) => track.featured) ?? tracks[0];
   const handle = config.name.replace(/^@/, "");
   const initials = (config.initials || handle.slice(0, 3) || "???").toUpperCase();
+  const showProfile = config.showProfile !== false;
+  const showAvatar = showProfile && config.showAvatar !== false;
 
   return (
     <main className="index-page">
@@ -65,7 +67,7 @@ export default function Page() {
             <a className="wordmark" href="#top" aria-label="Back to top">
               mini/web<span>®</span>
             </a>
-            <p className="masthead-note">personal index · kyiv / internet</p>
+            <p className="masthead-note">personal index · ua / internet</p>
             <div className="live-clock">
               <span className="live-dot" aria-hidden="true" />
               <span>online</span>
@@ -74,23 +76,28 @@ export default function Page() {
           </header>
         )}
 
-        <section className="identity" id="top" aria-labelledby="page-title">
+        <section className={`identity${showAvatar ? "" : " identity-wide"}`} id="top" aria-labelledby="page-title">
           <div className="identity-copy">
             <p className="section-kicker">01 / identity</p>
-            {config.showProfile !== false && config.showName !== false && (
+            {showProfile && config.showName !== false && (
               <h1 id="page-title" className="display-name">
                 <span>@</span>{handle}
               </h1>
             )}
-            {config.showProfile !== false && config.showBio !== false && config.bio && (
+            {showProfile && config.showBio !== false && config.bio && (
               <div className="bio-row">
                 <span className="bio-mark">↳</span>
                 <p>{config.bio}</p>
               </div>
             )}
+            {showProfile && config.showTags !== false && config.tags && config.tags.length > 0 && (
+              <ul className="tag-list" aria-label="Profile tags">
+                {config.tags.map((tag) => <li key={tag}>{tag}</li>)}
+              </ul>
+            )}
           </div>
 
-          {config.showProfile !== false && config.showAvatar !== false && (
+          {showAvatar && (
             <figure className="portrait">
               <div className="portrait-image">
                 {config.avatar ? (
@@ -110,7 +117,7 @@ export default function Page() {
                 <span>FIG. 001</span>
                 <span>DO NOT ADJUST</span>
               </figcaption>
-              <span className="portrait-stamp" aria-hidden="true">D/25</span>
+              <span className="portrait-stamp" aria-hidden="true">MW/26</span>
             </figure>
           )}
         </section>
@@ -184,11 +191,13 @@ export default function Page() {
           </aside>
         </div>
 
-        <footer className="index-footer">
-          <p>Built by hand. Best viewed with curiosity.</p>
-          <p>© {new Date().getFullYear()} {config.name}</p>
-          <a href="#top">top ↑</a>
-        </footer>
+        {config.showFooter !== false && (
+          <footer className="index-footer">
+            <p>Built by hand. Best viewed with curiosity.</p>
+            <p>© {new Date().getFullYear()} {config.name}</p>
+            <a href="#top">top ↑</a>
+          </footer>
+        )}
       </div>
 
       <Sheet open={trackListOpen} onOpenChange={setTrackListOpen}>
