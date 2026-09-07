@@ -12,6 +12,17 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
+function linkDetail(url: string) {
+  try {
+    const parsed = new URL(url, "https://miniweb.local");
+    if (parsed.protocol === "mailto:") return parsed.pathname;
+    if (parsed.origin === "https://miniweb.local") return parsed.pathname;
+    return parsed.hostname;
+  } catch {
+    return url;
+  }
+}
+
 export default function Page() {
   const config = siteConfig;
   const [activeTrack, setActiveTrack] = useState<MusicTrack | null>(null);
@@ -38,12 +49,12 @@ export default function Page() {
         {config.showHeader !== false && (
           <header className="site-header">
             <a href="#top" className="site-mark">miniweb</a>
-            <span>Ukraine</span>
+            <span className="header-mood" aria-label="waving cat">(^._.^)ﾉ</span>
           </header>
         )}
 
         {showProfile && (
-          <section className="profile" aria-labelledby="page-title">
+          <section className="profile" aria-labelledby={config.showName !== false ? "page-title" : undefined}>
             {showAvatar && (
               <div className="avatar">
                 {config.avatar ? (
@@ -63,12 +74,14 @@ export default function Page() {
           </section>
         )}
 
+        <p className="section-label">places on the internet</p>
         <nav className="link-list" aria-label="Links">
           {config.links.map((link, index) => (
             <a key={`${link.url}-${index}`} href={link.url} target="_blank" rel="noopener noreferrer" className="link-row">
-              <span>{link.label}</span>
-              <small>{link.sub || new URL(link.url).hostname}</small>
-              <i aria-hidden="true">↗</i>
+              <span className="link-index">{String(index + 1).padStart(2, "0")}</span>
+              <strong>{link.label}</strong>
+              <small>{link.sub || linkDetail(link.url)}</small>
+              <i className="link-arrow" aria-hidden="true">↗</i>
             </a>
           ))}
         </nav>
@@ -87,14 +100,24 @@ export default function Page() {
               <strong>{featured.title}</strong>
               <span>{featured.artist}</span>
             </span>
-            <i aria-hidden="true">›</i>
+            <span className="listening-face" aria-hidden="true">(♪)</span>
           </button>
         )}
+
+        <section className="webring" aria-label="DWing webring">
+          <p className="section-label">neighbours on the web</p>
+          <iframe
+            className="webring-frame"
+            src="https://dw.dexx.moe/widget?f=auto"
+            title="DWing webring"
+            loading="lazy"
+          />
+        </section>
 
         {config.showFooter !== false && (
           <footer className="site-footer">
             <span>© {new Date().getFullYear()} {config.name}</span>
-            <a href="https://dw.dexx.moe" target="_blank" rel="noopener noreferrer">webring ↗</a>
+            <a href="#top">back to top ↑</a>
           </footer>
         )}
       </div>
