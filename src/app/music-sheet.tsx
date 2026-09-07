@@ -44,8 +44,6 @@ export function MusicSheet({
 
   if (!track) return null;
 
-  const progress = duration ? (currentTime / duration) * 100 : 0;
-
   function togglePlayback() {
     const audio = audioRef.current;
     if (!audio) return;
@@ -84,37 +82,48 @@ export function MusicSheet({
                   preload="metadata"
                   onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
                   onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
-                  onEnded={() => setPlaying(false)}
+                  onEnded={() => {
+                    setPlaying(false);
+                    setCurrentTime(0);
+                  }}
                   onPause={() => setPlaying(false)}
                   onPlay={() => setPlaying(true)}
                 />
-                <div className="timeline">
-                  <button
-                    type="button"
-                    aria-label="Seek through track"
-                    onClick={(event) => {
-                      const audio = audioRef.current;
-                      if (!audio || !duration) return;
-                      const box = event.currentTarget.getBoundingClientRect();
-                      audio.currentTime = Math.max(0, Math.min(1, (event.clientX - box.left) / box.width)) * duration;
-                    }}
-                  >
-                    <i style={{ width: `${progress}%` }} />
-                  </button>
-                  <div><span>{formatTime(currentTime)}</span><span>{formatTime(duration)}</span></div>
-                </div>
-                <div className="player-actions">
-                  {onBack && <button type="button" onClick={onBack}>← List</button>}
-                  <button className="primary-play" type="button" onClick={togglePlayback}>{playing ? "Pause" : "Play"}</button>
-                  <a href={track.url} target="_blank" rel="noopener noreferrer">Source ↗</a>
-                </div>
               </>
-            ) : (
-              <div className="player-actions">
-                {onBack && <button type="button" onClick={onBack}>← List</button>}
-                <a className="primary-play" href={track.url} target="_blank" rel="noopener noreferrer">Open ↗</a>
+            ) : null}
+          </div>
+
+          <div className="player-controls">
+            {track.audio && (
+              <div className="timeline">
+                <input
+                  type="range"
+                  min={0}
+                  max={duration || 0}
+                  step={0.1}
+                  value={Math.min(currentTime, duration || 0)}
+                  aria-label="Track position"
+                  aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
+                  onChange={(event) => {
+                    const audio = audioRef.current;
+                    if (!audio) return;
+                    const nextTime = Number(event.currentTarget.value);
+                    audio.currentTime = nextTime;
+                    setCurrentTime(nextTime);
+                  }}
+                />
+                <div><span>{formatTime(currentTime)}</span><span>{formatTime(duration)}</span></div>
               </div>
             )}
+            <div className="player-actions">
+              {onBack && <button type="button" onClick={onBack}>← list</button>}
+              {track.audio ? (
+                <button className="primary-play" type="button" onClick={togglePlayback}>{playing ? "pause Ⅱ" : "play ♪"}</button>
+              ) : (
+                <a className="primary-play" href={track.url} target="_blank" rel="noopener noreferrer">open ↗</a>
+              )}
+              {track.audio && <a href={track.url} target="_blank" rel="noopener noreferrer">source ↗</a>}
+            </div>
           </div>
         </div>
       </SheetContent>
