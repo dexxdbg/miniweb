@@ -8,8 +8,8 @@ const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "@dexxdbg",
-  description: "Links & music from @dexxdbg.",
+  title: "@PoZorKino — nanoweb",
+  description: "Links & music from @PoZorKino.",
 };
 
 export const viewport: Viewport = {
