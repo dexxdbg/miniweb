@@ -14,9 +14,9 @@ import {
 
 function linkDetail(url: string) {
   try {
-    const parsed = new URL(url, "https://miniweb.local");
+    const parsed = new URL(url, "https://nanoweb.local");
     if (parsed.protocol === "mailto:") return parsed.pathname;
-    if (parsed.origin === "https://miniweb.local") return parsed.pathname;
+    if (parsed.origin === "https://nanoweb.local") return parsed.pathname;
     return parsed.hostname;
   } catch {
     return url;
@@ -48,7 +48,7 @@ export default function Page() {
       <div className="site-content">
         {config.showHeader !== false && (
           <header className="site-header">
-            <a href="#top" className="site-mark">miniweb</a>
+            <a href="#top" className="site-mark">nanoweb</a>
             <span className="header-mood" aria-label="waving cat">(^._.^)ﾉ</span>
           </header>
         )}
