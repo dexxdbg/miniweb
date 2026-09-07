@@ -53,7 +53,7 @@ export type SiteConfig = {
 };
 
 export const siteConfig: SiteConfig = {
-  name: "@dexxdbg",
+  name: "@PoZorKino",
   bio: "why would u ddo this?//",
   avatar: "/wrong.jpg", // e.g. "/me.jpg" or "https://..."
   initials: "dgb",
